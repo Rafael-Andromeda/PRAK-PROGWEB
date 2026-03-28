@@ -5,10 +5,22 @@
 - COMMIT MERGE HANYA KALAU SUDAH FIX JADI
 
 COLOR PALLET
-#1B4332 
-#2D6A4F 
-#40916C 
-#95D5B2 
-#D8F3DC 
-#F8F9FA 
+Palet Hijau (Asli)
+#1B4332
+#2D6A4F
+#40916C
+#95D5B2
+#D8F3DC
+#F8F9FA
 #FFFFFF
+Tambahan Coklat Pohon
+#5C4033
+#7F5539
+#A47148
+#3E2723
+Kombinasi Utama
+Primary: #2D6A4F
+Secondary: #95D5B2
+Accent (coklat): #7F5539
+Dark: #1B4332 / #3E2723
+Background: #F8F9FA / #FFFFFF
