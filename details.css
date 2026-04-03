@@ -13,7 +13,6 @@ body {
   position: relative;
 }
 
-/* BACKGROUND EFFECT (SAMA INDEX) */
 body::before {
   content: "";
   position: fixed;
@@ -40,14 +39,12 @@ body::after {
   z-index: 0;
 }
 
-/* CONTAINER */
 .container {
   width: 90%;
   max-width: 1200px;
   margin: auto;
 }
 
-/* HEADER */
 header {
   background: rgba(255, 255, 255, 0.4);
   backdrop-filter: blur(10px);
@@ -91,7 +88,6 @@ nav a.login-btn:hover {
   transform: translateY(-2px);
 }
 
-/* MAIN */
 main {
   width: 90%;
   max-width: 1000px;
@@ -100,7 +96,6 @@ main {
   z-index: 1;
 }
 
-/* IMAGE */
 .image img {
   width: 100%;
   height: 280px;
@@ -110,7 +105,6 @@ main {
   box-shadow: 0 10px 40px rgba(0,0,0,0.1);
 }
 
-/* CARD */
 .card {
   background: rgba(255, 255, 255, 0.35);
   backdrop-filter: blur(18px);
@@ -120,7 +114,6 @@ main {
   border: 1px solid rgba(255,255,255,0.5);
 }
 
-/* TITLE */
 .title h1 {
   font-size: 1.6rem;
   margin-bottom: 6px;
@@ -131,7 +124,6 @@ main {
   color: #52796F;
 }
 
-/* PROFILE */
 .profile {
   display: flex;
   align-items: center;
@@ -149,7 +141,6 @@ main {
   justify-content: center;
 }
 
-/* DONORS */
 .donors {
   display: flex;
   align-items: center;
@@ -174,7 +165,6 @@ main {
   font-size: 13px;
 }
 
-/* PROGRESS */
 .nom-sekarang {
   font-size: 1.4rem;
   font-weight: 700;
@@ -199,7 +189,6 @@ main {
   background: linear-gradient(90deg, #7F5539, #A47148);
 }
 
-/* STATS */
 .stats {
   display: flex;
   justify-content: space-between;
@@ -216,7 +205,6 @@ main {
   color: #52796F;
 }
 
-/* SISA */
 .sisa-hari {
   display: flex;
   align-items: center;
@@ -232,7 +220,6 @@ main {
   font-size: 11px;
 }
 
-/* DONASI TERBARU */
 .baru-saja-berdonasi {
   display: flex;
   align-items: center;
@@ -244,7 +231,6 @@ main {
   font-weight: 600;
 }
 
-/* DESKRIPSI */
 .deskripsi {
   margin: 20px 0;
 }
@@ -260,14 +246,12 @@ main {
   font-weight: 600;
 }
 
-/* IMPACT */
 .impact-item {
   display: flex;
   gap: 10px;
   margin-bottom: 10px;
 }
 
-/* TIERS */
 .tiers {
   display: flex;
   flex-direction: column;
@@ -288,7 +272,6 @@ main {
 
 .tier:hover {
   border-color: #2D6A4F;
-  transform: translateY(-2px);
 }
 
 .tier-amount {
@@ -308,12 +291,11 @@ main {
   font-size: 11px;
 }
 
-/* BUTTON */
 .btn-donate {
   display: block;
   text-align: center;
   width: 100%;
-  padding: 14px;
+  padding: 11px;
   border-radius: 25px;
   background: #2D6A4F;
   color: white;
@@ -324,10 +306,8 @@ main {
 
 .btn-donate:hover {
   background: #7F5539;
-  transform: translateY(-2px);
 }
 
-/* FOOTER */
 footer {
   margin-top: 60px;
   background: rgba(27, 67, 50, 0.92);
@@ -357,7 +337,6 @@ footer {
   background: rgba(0,0,0,0.2);
 }
 
-/* HR */
 hr {
   border: none;
   height: 1px;

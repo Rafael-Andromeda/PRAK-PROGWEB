@@ -1,6 +1,3 @@
-/* ===========================
-   RESET & BASE
-=========================== */
 * {
     margin: 0;
     padding: 0;
@@ -16,7 +13,6 @@ body {
     overflow-x: hidden;
 }
 
-/* Decorative blobs — sama dengan index & login */
 body::before {
     content: "";
     position: fixed;
@@ -51,9 +47,6 @@ body::after {
     margin: auto;
 }
 
-/* ===========================
-   HEADER
-=========================== */
 header {
     background: rgba(255, 255, 255, 0.4);
     backdrop-filter: blur(10px);
@@ -87,21 +80,6 @@ nav a {
     transition: color 0.2s;
 }
 
-nav a::after {
-    content: '';
-    height: 2px;
-    width: 0;
-    background: #2D6A4F;
-    position: absolute;
-    left: 0;
-    bottom: -3px;
-    transition: 0.3s;
-    border-radius: 2px;
-}
-
-nav a:hover::after {
-    width: 100%;
-}
 
 nav a.login-btn {
     background: #2D6A4F;
@@ -121,16 +99,12 @@ nav a.login-btn:hover {
     transform: translateY(-2px);
 }
 
-/* ===========================
-   MAIN / LAYOUT
-=========================== */
 main {
     position: relative;
     z-index: 1;
     padding: 30px 0 60px;
 }
 
-/* Breadcrumb */
 .breadcrumb {
     display: flex;
     align-items: center;
@@ -150,7 +124,6 @@ main {
     text-decoration: underline;
 }
 
-/* Glassmorphism card */
 .glass {
     background: rgba(255, 255, 255, 0.35);
     backdrop-filter: blur(18px);
@@ -160,7 +133,6 @@ main {
     border-radius: 20px;
 }
 
-/* Two-column layout */
 .donasi-wrapper {
     display: grid;
     grid-template-columns: 1fr 420px;
@@ -174,9 +146,6 @@ main {
     }
 }
 
-/* ===========================
-   CAMPAIGN INFO (LEFT)
-=========================== */
 .campaign-info {
     overflow: hidden;
 }
@@ -220,7 +189,6 @@ main {
     margin-bottom: 22px;
 }
 
-/* Progress section */
 .progress-section {
     border-top: 1px solid rgba(45, 106, 79, 0.15);
     padding-top: 18px;
@@ -274,9 +242,6 @@ main {
     color: #52796F;
 }
 
-/* ===========================
-   FORM DONASI (RIGHT)
-=========================== */
 .form-card {
     padding: 28px;
     position: sticky;
@@ -292,7 +257,6 @@ main {
     border-bottom: 2px solid rgba(45, 106, 79, 0.15);
 }
 
-/* Nominal grid */
 .input-label {
     font-size: 14px;
     font-weight: 600;
@@ -319,11 +283,6 @@ main {
     transition: 0.2s;
 }
 
-.nominal-btn:hover {
-    border-color: #2D6A4F;
-    background: rgba(45, 106, 79, 0.08);
-}
-
 .nominal-btn.active {
     background: #2D6A4F;
     color: white;
@@ -331,7 +290,6 @@ main {
     box-shadow: 0 3px 10px rgba(45, 106, 79, 0.3);
 }
 
-/* Input group */
 .input-group {
     margin-bottom: 16px;
 }
@@ -422,7 +380,6 @@ main {
     box-shadow: 0 0 0 3px rgba(45, 106, 79, 0.15);
 }
 
-/* Checkbox */
 .checkbox-row {
     display: flex !important;
     align-items: center;
@@ -440,7 +397,6 @@ main {
     accent-color: #2D6A4F;
 }
 
-/* Payment options */
 .payment-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -471,18 +427,12 @@ main {
     display: block;
 }
 
-.payment-option:hover {
-    border-color: #2D6A4F;
-    background: rgba(45, 106, 79, 0.06);
-}
-
 .payment-option.active-pay {
     border-color: #2D6A4F;
     background: rgba(45, 106, 79, 0.1);
     box-shadow: 0 3px 10px rgba(45, 106, 79, 0.2);
 }
 
-/* Summary box */
 .summary-box {
     background: rgba(216, 243, 220, 0.4);
     border-radius: 14px;
@@ -508,7 +458,6 @@ main {
     font-size: 15px;
 }
 
-/* Submit button */
 .submit-btn {
     width: 100%;
     padding: 14px;
@@ -525,7 +474,6 @@ main {
 
 .submit-btn:hover {
     background: #7F5539;
-    transform: translateY(-2px);
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
 }
 
@@ -536,9 +484,6 @@ main {
     margin-top: 10px;
 }
 
-/* ===========================
-   DONATUR TERBARU
-=========================== */
 .recent-donors {
     margin-top: 40px;
 }
@@ -562,10 +507,6 @@ main {
     gap: 14px;
     padding: 18px;
     transition: transform 0.3s;
-}
-
-.donor-card:hover {
-    transform: translateY(-4px);
 }
 
 .donor-avatar {
@@ -597,9 +538,6 @@ main {
     margin-top: 5px !important;
 }
 
-/* ===========================
-   MODAL
-=========================== */
 .modal-overlay {
     position: fixed;
     inset: 0;
@@ -635,9 +573,6 @@ main {
     line-height: 1.6;
 }
 
-/* ===========================
-   FOOTER
-=========================== */
 footer {
     margin-top: 60px;
     background: rgba(27, 67, 50, 0.92);

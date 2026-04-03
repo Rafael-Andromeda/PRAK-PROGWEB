@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="donasi.css">
 </head>
 <body>
-
 <header>
     <div class="container nav">
         <h1 class="logo">TreeVolution</h1>
@@ -19,10 +18,7 @@
         </nav>
     </div>
 </header>
-
 <main class="container">
-
-    <!-- Breadcrumb -->
     <div class="breadcrumb">
         <a href="index.html">Beranda</a>
         <span>›</span>
@@ -30,8 +26,6 @@
     </div>
 
     <div class="donasi-wrapper">
-
-        <!-- LEFT: Info Kampanye -->
         <div class="campaign-info glass">
             <img src="https://cdn.antaranews.com/cache/1200x800/2021/10/29/antarafoto-pegunungan-patiayam-butuh-penghijauan-281021-yn-5.jpg.webp" alt="Kampanye" class="campaign-img">
             <div class="campaign-body">
@@ -65,17 +59,15 @@
                 </div>
             </div>
         </div>
-
-        <!-- RIGHT: Form Donasi -->
         <div class="form-card glass">
             <h3 class="form-title">Formulir Donasi</h3>
 
             <div class="nominal-section">
                 <p class="input-label">Pilih Nominal</p>
                 <div class="nominal-grid">
-                    <button class="nominal-btn" onclick="setNominal(10000)">Rp 10.000</button>
+                    <button class="nominal-btn active" onclick="setNominal(10000)">Rp 10.000</button>
                     <button class="nominal-btn" onclick="setNominal(25000)">Rp 25.000</button>
-                    <button class="nominal-btn active" onclick="setNominal(50000)">Rp 50.000</button>
+                    <button class="nominal-btn" onclick="setNominal(50000)">Rp 50.000</button>
                     <button class="nominal-btn" onclick="setNominal(100000)">Rp 100.000</button>
                     <button class="nominal-btn" onclick="setNominal(250000)">Rp 250.000</button>
                     <button class="nominal-btn" onclick="setNominal(500000)">Rp 500.000</button>
@@ -86,7 +78,7 @@
                 <label for="nominal">Atau masukkan nominal lain</label>
                 <div class="input-prefix">
                     <span>Rp</span>
-                    <input type="number" id="nominal" placeholder="0" value="50000" min="1000">
+                    <input type="number" id="nominal" placeholder="0" value="10000" min="1000">
                 </div>
             </div>
 
@@ -147,10 +139,8 @@
 
             <p class="secure-note">🔒 Transaksi aman & terenkripsi</p>
         </div>
-
     </div>
 
-    <!-- Donatur Terbaru -->
     <section class="recent-donors">
         <h3>Donatur Terbaru</h3>
         <div class="donors-list">
@@ -183,7 +173,6 @@
 
 </main>
 
-<!-- Success Modal -->
 <div class="modal-overlay" id="modal" style="display:none">
     <div class="modal-box glass">
         <div class="modal-icon">🌳</div>
@@ -199,59 +188,10 @@
             <h3>TreeVolution</h3>
             <p>Platform donasi untuk lingkungan yang lebih baik.</p>
         </div>
-        <div>
-            <h4>Kontak</h4>
-            <p>Email: TreeVolution@mail.com</p>
-            <p>Instagram: @TreeVolution</p>
-        </div>
     </div>
     <div class="copyright">
         <p>© 2026 TreeVolution | Copyright by Kelompok Gatau</p>
     </div>
 </footer>
-
-<script>
-    function setNominal(val) {
-        document.getElementById('nominal').value = val;
-        updateSummary(val);
-        document.querySelectorAll('.nominal-btn').forEach(b => b.classList.remove('active'));
-        event.target.classList.add('active');
-    }
-
-    function updateSummary(val) {
-        const fmt = 'Rp ' + Number(val).toLocaleString('id-ID');
-        document.getElementById('summary-nominal').textContent = fmt;
-        document.getElementById('summary-total').textContent = fmt;
-    }
-
-    document.getElementById('nominal').addEventListener('input', function() {
-        updateSummary(this.value || 0);
-        document.querySelectorAll('.nominal-btn').forEach(b => b.classList.remove('active'));
-    });
-
-    document.querySelectorAll('.payment-option').forEach(opt => {
-        opt.addEventListener('click', function() {
-            document.querySelectorAll('.payment-option').forEach(o => o.classList.remove('active-pay'));
-            this.classList.add('active-pay');
-        });
-    });
-
-    function submitDonasi() {
-        const nama = document.getElementById('nama').value;
-        const email = document.getElementById('email').value;
-        const nominal = document.getElementById('nominal').value;
-        if (!nominal || nominal < 1000) {
-            alert('Nominal donasi minimal Rp 1.000');
-            return;
-        }
-        document.getElementById('modal').style.display = 'flex';
-    }
-
-    function closeModal() {
-        document.getElementById('modal').style.display = 'none';
-        window.location.href = 'index.html';
-    }
-</script>
-
 </body>
 </html>
