@@ -131,6 +131,26 @@ main {
   margin: 18px 0;
 }
 
+.campaign-info {
+  margin: 10px 0 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.info-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: bold;
+  color: #52796F;
+}
+
+.info-item span {
+  font-size: 18px;
+}
+
 .profile-picture {
   width: 45px;
   height: 45px;
@@ -283,19 +303,12 @@ main {
   color: #52796F;
 }
 
-.tier-badge {
-  margin-left: auto;
-  background: #95D5B2;
-  padding: 3px 8px;
-  border-radius: 10px;
-  font-size: 11px;
-}
-
 .btn-donate {
   display: block;
   text-align: center;
   width: 100%;
   padding: 11px;
+  margin-top: 15px;
   border-radius: 25px;
   background: #2D6A4F;
   color: white;

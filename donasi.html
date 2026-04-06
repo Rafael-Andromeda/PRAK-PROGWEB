@@ -7,191 +7,85 @@
     <link rel="stylesheet" href="donasi.css">
 </head>
 <body>
+
 <header>
     <div class="container nav">
         <h1 class="logo">TreeVolution</h1>
         <nav>
             <a href="index.html">Beranda</a>
-            <a href="#">Kategori</a>
-            <a href="#">Tentang</a>
-            <a href="login.html" class="login-btn">Login</a>
+            <a href="details.html">Kembali</a>
         </nav>
     </div>
 </header>
-<main class="container">
-    <div class="breadcrumb">
-        <a href="index.html">Beranda</a>
-        <span>›</span>
-        <span>Donasi</span>
-    </div>
 
-    <div class="donasi-wrapper">
-        <div class="campaign-info glass">
-            <img src="https://cdn.antaranews.com/cache/1200x800/2021/10/29/antarafoto-pegunungan-patiayam-butuh-penghijauan-281021-yn-5.jpg.webp" alt="Kampanye" class="campaign-img">
-            <div class="campaign-body">
-                <span class="badge">Lingkungan</span>
-                <h2>Reboisasi Hutan Jawa Barat</h2>
-                <p class="org">oleh <strong>Green Earth</strong></p>
-                <p class="desc">
-                    Program reboisasi ini bertujuan untuk memulihkan kawasan hutan yang rusak akibat pembalakan liar
-                    dan alih fungsi lahan. Setiap donasi Anda akan langsung digunakan untuk pembelian bibit pohon,
-                    penanaman, dan pemeliharaan selama 2 tahun ke depan.
-                </p>
+<main>
+    <div class="card glass">
+            <h2>Form Donasi</h2>
 
-                <div class="progress-section">
-                    <div class="fund-info">
-                        <div>
-                            <span class="amount">Rp 25.000.000</span>
-                            <span class="label">Terkumpul</span>
-                        </div>
-                        <div class="text-right">
-                            <span class="amount target">50%</span>
-                            <span class="label">dari target Rp 50jt</span>
-                        </div>
+            <div id="successMsg" class="success-msg" style="display:none;">
+                Donasi Anda berhasil dikirim! Terima kasih atas kepedulian Anda.
+            </div>
+
+            <form id="donasiForm">
+                <div class="form-group">
+                    <label for="nama">Nama Lengkap</label>
+                    <input type="text" id="nama" placeholder="Masukkan nama Anda" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" placeholder="Masukkan email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="nominal">Pilih Nominal</label>
+                    <select id="nominal" required>
+                        <option value="">Pilih Donasi</option>
+                        <option value="10000">Rp 10.000</option>
+                        <option value="25000">Rp 25.000</option>
+                        <option value="50000">Rp 50.000</option>
+                        <option value="100000">Rp 100.000</option>
+                        <option value="250000">Rp 250.000</option>
+                        <option value="500000">Rp 500.000</option>
+                        <option value="1000000">Rp 1.000.000</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="metode">Metode Pembayaran</label>
+                    <select id="metode" required>
+                        <option value="">Pilih Metode</option>
+                        <option>Transfer Bank (BCA / BNI / Mandiri)</option>
+                        <option>E-Wallet (OVO, DANA, GoPay)</option>
+                        <option>QRIS</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="bukti">Bukti Transfer</label>
+                    <div class="file-upload-wrapper">
+                        <input type="file" id="bukti" accept=".pdf,.jpg,.jpeg,.png" required>
+                        <label for="bukti" class="file-upload-label">
+                            <span id="fileNameDisplay">Pilih file (PDF / JPG / PNG)</span>
+                        </label>
                     </div>
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: 50%"></div>
-                    </div>
-                    <div class="meta-row">
-                        <span>👥 <strong>1.240</strong> donatur</span>
-                        <span>⏳ <strong>18 hari</strong> tersisa</span>
-                    </div>
+                    <p class="file-hint">Format yang diterima: PDF, JPG, PNG. Maks. 5 MB.</p>
                 </div>
-            </div>
+
+                <div class="form-group">
+                    <label for="pesan">Pesan Dukungan <span class="optional">(Opsional)</span></label>
+                    <textarea id="pesan" placeholder="Tulis pesan atau doa untuk kampanye ini..."></textarea>
+                </div>
+
+                <button type="submit" class="btn-submit">Donasi Sekarang</button>
+            </form>
         </div>
-        <div class="form-card glass">
-            <h3 class="form-title">Formulir Donasi</h3>
-
-            <div class="nominal-section">
-                <p class="input-label">Pilih Nominal</p>
-                <div class="nominal-grid">
-                    <button class="nominal-btn active" onclick="setNominal(10000)">Rp 10.000</button>
-                    <button class="nominal-btn" onclick="setNominal(25000)">Rp 25.000</button>
-                    <button class="nominal-btn" onclick="setNominal(50000)">Rp 50.000</button>
-                    <button class="nominal-btn" onclick="setNominal(100000)">Rp 100.000</button>
-                    <button class="nominal-btn" onclick="setNominal(250000)">Rp 250.000</button>
-                    <button class="nominal-btn" onclick="setNominal(500000)">Rp 500.000</button>
-                </div>
-            </div>
-
-            <div class="input-group">
-                <label for="nominal">Atau masukkan nominal lain</label>
-                <div class="input-prefix">
-                    <span>Rp</span>
-                    <input type="number" id="nominal" placeholder="0" value="10000" min="1000">
-                </div>
-            </div>
-
-            <div class="input-group">
-                <label for="nama">Nama Lengkap</label>
-                <input type="text" id="nama" placeholder="Masukkan nama Anda">
-                <label class="checkbox-row">
-                    <input type="checkbox" id="anonim"> Donasi sebagai anonim
-                </label>
-            </div>
-
-            <div class="input-group">
-                <label for="email">Email</label>
-                <input type="email" id="email" placeholder="email@contoh.com">
-            </div>
-
-            <div class="input-group">
-                <label for="pesan">Pesan (opsional)</label>
-                <textarea id="pesan" rows="3" placeholder="Tulis pesan dukungan..."></textarea>
-            </div>
-
-            <div class="input-group">
-                <label>Metode Pembayaran</label>
-                <div class="payment-grid">
-                    <label class="payment-option active-pay">
-                        <input type="radio" name="payment" value="transfer" checked>
-                        <span>🏦 Transfer Bank</span>
-                    </label>
-                    <label class="payment-option">
-                        <input type="radio" name="payment" value="ewallet">
-                        <span>💳 E-Wallet</span>
-                    </label>
-                    <label class="payment-option">
-                        <input type="radio" name="payment" value="qris">
-                        <span>📱 QRIS</span>
-                    </label>
-                </div>
-            </div>
-
-            <div class="summary-box">
-                <div class="summary-row">
-                    <span>Nominal Donasi</span>
-                    <span id="summary-nominal">Rp 50.000</span>
-                </div>
-                <div class="summary-row">
-                    <span>Biaya Layanan</span>
-                    <span>Rp 0</span>
-                </div>
-                <div class="summary-row total">
-                    <span>Total</span>
-                    <span id="summary-total">Rp 50.000</span>
-                </div>
-            </div>
-
-            <button class="submit-btn" onclick="submitDonasi()">
-                🌱 Donasi Sekarang
-            </button>
-
-            <p class="secure-note">🔒 Transaksi aman & terenkripsi</p>
-        </div>
-    </div>
-
-    <section class="recent-donors">
-        <h3>Donatur Terbaru</h3>
-        <div class="donors-list">
-            <div class="donor-card glass">
-                <div class="donor-avatar">🌿</div>
-                <div>
-                    <strong>Budi Santoso</strong>
-                    <p>Rp 100.000 · 2 jam lalu</p>
-                    <p class="donor-msg">"Semangat untuk bumi yang lebih hijau!"</p>
-                </div>
-            </div>
-            <div class="donor-card glass">
-                <div class="donor-avatar">🌱</div>
-                <div>
-                    <strong>Anonim</strong>
-                    <p>Rp 50.000 · 5 jam lalu</p>
-                    <p class="donor-msg">"Demi anak cucu kita."</p>
-                </div>
-            </div>
-            <div class="donor-card glass">
-                <div class="donor-avatar">🍃</div>
-                <div>
-                    <strong>Siti Rahayu</strong>
-                    <p>Rp 250.000 · 1 hari lalu</p>
-                    <p class="donor-msg">"Terus bergerak untuk lingkungan!"</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
 </main>
-
-<div class="modal-overlay" id="modal" style="display:none">
-    <div class="modal-box glass">
-        <div class="modal-icon">🌳</div>
-        <h3>Terima Kasih!</h3>
-        <p>Donasi Anda telah berhasil dikirim.<br>Bersama kita jaga bumi ini.</p>
-        <button class="submit-btn" onclick="closeModal()">Kembali ke Beranda</button>
-    </div>
-</div>
-
 <footer>
-    <div class="footer-content container">
-        <div>
-            <h3>TreeVolution</h3>
-            <p>Platform donasi untuk lingkungan yang lebih baik.</p>
-        </div>
-    </div>
     <div class="copyright">
-        <p>© 2026 TreeVolution | Copyright by Kelompok Gatau</p>
+        <p>© 2026 TreeVolution</p>
     </div>
 </footer>
+
 </body>
 </html>

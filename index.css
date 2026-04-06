@@ -229,7 +229,6 @@ nav a.login-btn:hover {
 
 .filter button:hover {
   background: #7F5539;
-  transform: translateY(-2px);
 }
 
 .campaigns {
@@ -323,6 +322,13 @@ nav a.login-btn:hover {
   background: linear-gradient(90deg, #7F5539, #A47148);
   border-radius: 10px;
   transition: width 0.5s ease;
+}
+
+.deadline {
+  font-size: 16px;
+  font-weight: bold;
+  color: #2D6A4F;
+  margin-top: 5px;
 }
 
 .donate-btn {
