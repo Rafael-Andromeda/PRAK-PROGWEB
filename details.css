@@ -161,30 +161,6 @@ main {
   justify-content: center;
 }
 
-.donors {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin: 15px 0;
-}
-
-.donor-av {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  background: #2D6A4F;
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 12px;
-}
-
-.donor-info {
-  margin-left: 10px;
-  font-size: 13px;
-}
-
 .nom-sekarang {
   font-size: 1.4rem;
   font-weight: 700;
@@ -238,17 +214,6 @@ main {
   padding: 4px 10px;
   border-radius: 15px;
   font-size: 11px;
-}
-
-.baru-saja-berdonasi {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.nominal-donasi {
-  margin-left: auto;
-  font-weight: 600;
 }
 
 .deskripsi {
