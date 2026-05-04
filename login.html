@@ -2,13 +2,13 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>Login TreeVolution - Crowdfunding Lingkungan</title>
+  <title>Login Kindnesia - Crowdfunding Social and Nature</title>
   <link rel="stylesheet" href="login.css">
 </head>
 <body>
 
 <header>
-  <h1>Treevolution</h1>
+  <h1>Kindnesia</h1>
   <nav>
     <a href="index.html">Beranda</a>
     <a href="#">Login</a>
@@ -43,23 +43,8 @@
 </div>
 
 <footer>
-  © 2026 Treevolution
+  © 2026 Kindnesia
 </footer>
-
-<script>
-function setRole(role, el) {
-  const buttons = document.querySelectorAll(".role-toggle button");
-  buttons.forEach(btn => btn.classList.remove("active"));
-  el.classList.add("active");
-
-  const loginBtn = document.getElementById("loginBtn");
-  if (role === "donatur") {
-    loginBtn.innerText = "Masuk sebagai Donatur";
-  } else {
-    loginBtn.innerText = "Masuk sebagai Pengelola";
-  }
-}
-</script>
-
+<script src="login.js"></script>
 </body>
 </html>

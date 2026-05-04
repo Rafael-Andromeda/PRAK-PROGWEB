@@ -1,55 +1,40 @@
+/* ==========================================
+   TreeVolution — Donation Page
+   Modern Minimalist Theme
+   ========================================== */
+
+:root {
+  --primary: #1E3A8A;
+  --primary-hover: #1e40af;
+  --secondary: #38BDF8;
+  --secondary-light: #e0f2fe;
+  --bg: #F9FAFB;
+  --surface: #FFFFFF;
+  --text: #111827;
+  --text-muted: #6B7280;
+  --text-light: #9CA3AF;
+  --border: #E5E7EB;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.07);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.08), 0 2px 6px rgba(0,0,0,0.04);
+  --shadow-lg: 0 12px 40px rgba(30,58,138,0.12), 0 4px 12px rgba(0,0,0,0.06);
+  --radius: 10px;
+  --radius-lg: 14px;
+  --radius-pill: 50px;
+}
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Segoe UI', sans-serif;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
 }
 
 body {
-  background: linear-gradient(135deg, #D8F3DC, #F8F9FA);
-  color: #1B4332;
+  background: var(--bg);
+  color: var(--text);
   min-height: 100vh;
-  position: relative;
   overflow-x: hidden;
-}
-
-body::before {
-  content: "";
-  position: fixed;
-  width: 300px;
-  height: 300px;
-  background: #95D5B2;
-  border-radius: 50%;
-  top: -80px;
-  left: -80px;
-  filter: blur(120px);
-  pointer-events: none;
-  z-index: 0;
-}
-
-body::after {
-  content: "";
-  position: fixed;
-  width: 250px;
-  height: 250px;
-  background: #A47148;
-  border-radius: 50%;
-  bottom: -60px;
-  right: -60px;
-  filter: blur(100px);
-  pointer-events: none;
-  z-index: 0;
-}
-
-header {
-  background: rgba(255, 255, 255, 0.4);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  padding: 15px 0;
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.08);
+  line-height: 1.6;
 }
 
 .container {
@@ -58,127 +43,178 @@ header {
   margin: auto;
 }
 
+/* ==========================================
+   HEADER / NAVBAR
+   ========================================== */
+header {
+  background: var(--primary);
+  padding: 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 12px rgba(30,58,138,0.18);
+}
+
 .nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 16px 0;
 }
 
 .logo {
-  color: #2D6A4F;
-  font-size: 1.5rem;
-  font-weight: 700;
+  color: white;
+  font-size: 1.4rem;
+  font-weight: 800;
   letter-spacing: -0.5px;
+  text-transform: uppercase;
 }
 
 nav a {
   margin-left: 20px;
-  color: #1B4332;
+  color: rgba(255,255,255,0.8);
   text-decoration: none;
   font-weight: 500;
+  font-size: 0.9rem;
   transition: color 0.2s;
 }
 
 nav a:hover {
-  color: #2D6A4F;
+  color: var(--secondary);
 }
 
 nav a.back-btn {
-  background: #2D6A4F;
-  color: white;
-  padding: 8px 18px;
-  border-radius: 25px;
-  font-weight: 600;
+  background: var(--secondary);
+  color: var(--primary);
+  padding: 8px 20px;
+  border-radius: var(--radius-pill);
+  font-weight: 700;
+  font-size: 0.88rem;
   transition: background 0.25s, transform 0.2s;
 }
 
 nav a.back-btn:hover {
-  background: #7F5539;
+  background: #7dd3fc;
+  transform: translateY(-1px);
 }
 
+/* ==========================================
+   MAIN CONTENT
+   ========================================== */
 main {
   width: 90%;
   max-width: 600px;
-  margin: 50px auto;
-  position: relative;
-  z-index: 1;
+  margin: 48px auto 60px;
 }
 
+/* ==========================================
+   FORM CARD
+   ========================================== */
 .card {
-  border-radius: 20px;
-  padding: 35px 30px;
-  max-width: 700px;
-  margin: 0 auto;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 36px 32px;
+  box-shadow: var(--shadow-lg);
+}
+
+.glass {
+  background: var(--surface);
 }
 
 .card h2 {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #1B4332;
+  font-size: 1.45rem;
+  font-weight: 800;
+  color: var(--primary);
   margin-bottom: 24px;
-  letter-spacing: -0.3px;
+  letter-spacing: -0.5px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid var(--secondary-light);
 }
 
+/* ==========================================
+   SUCCESS MESSAGE
+   ========================================== */
 .success-msg {
-  background: rgba(149, 213, 178, 0.4);
-  border: 2px solid #40916C;
-  color: #1B4332;
-  border-radius: 15px;
+  background: #EFF6FF;
+  border: 1.5px solid var(--secondary);
+  color: var(--primary);
+  border-radius: var(--radius);
   padding: 16px 20px;
   font-weight: 600;
-  font-size: 0.95rem;
-  margin-bottom: 20px;
+  font-size: 0.92rem;
+  margin-bottom: 22px;
   text-align: center;
 }
 
+/* ==========================================
+   FORM GROUPS
+   ========================================== */
 .form-group {
-  margin-bottom: 18px;
+  margin-bottom: 20px;
   display: flex;
   flex-direction: column;
 }
 
 .form-group label {
   margin-bottom: 7px;
-  font-size: 13.5px;
-  font-weight: 600;
-  color: #2D6A4F;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: 0.1px;
 }
 
 .optional {
   font-weight: 400;
-  color: #52796F;
-  font-size: 12px;
+  color: var(--text-light);
+  font-size: 11.5px;
 }
 
-input[type="text"], input[type="email"], select, textarea {
-  padding: 12px 16px;
-  border-radius: 25px;
-  border: 2px solid rgba(45, 106, 79, 0.3);
-  background: rgba(255, 255, 255, 0.35);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  color: #1B4332;
+input[type="text"],
+input[type="email"],
+select,
+textarea {
+  padding: 11px 15px;
+  border-radius: var(--radius);
+  border: 1.5px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
   font-size: 0.9rem;
   outline: none;
-  transition: 0.2s;
-  font-family: 'Segoe UI', sans-serif;
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+  font-family: inherit;
 }
 
-input[type="text"]::placeholder, input[type="email"]::placeholder, textarea::placeholder {
-  color: #52796F;
+input[type="text"]::placeholder,
+input[type="email"]::placeholder,
+textarea::placeholder {
+  color: var(--text-light);
 }
 
-input[type="text"]:focus, input[type="email"]:focus, select:focus, textarea:focus {
-  border-color: #2D6A4F;
-  box-shadow: 0 0 0 3px rgba(45, 106, 79, 0.15);
+input[type="text"]:focus,
+input[type="email"]:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--secondary);
+  box-shadow: 0 0 0 3px rgba(56,189,248,0.15);
+  background: var(--surface);
+}
+
+select {
+  cursor: pointer;
+  appearance: auto;
 }
 
 textarea {
   resize: none;
-  height: 90px;
-  border-radius: 15px;
+  height: 95px;
+  border-radius: var(--radius);
+  line-height: 1.6;
 }
 
+/* ==========================================
+   FILE UPLOAD
+   ========================================== */
 input[type="file"] {
   display: none;
 }
@@ -191,21 +227,20 @@ input[type="file"] {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 12px 16px;
-  border-radius: 25px;
-  border: 2px dashed rgba(45, 106, 79, 0.4);
-  background: rgba(255, 255, 255, 0.35);
-  backdrop-filter: blur(10px);
-  color: #52796F;
-  font-size: 0.9rem;
+  padding: 11px 15px;
+  border-radius: var(--radius);
+  border: 1.5px dashed var(--border);
+  background: var(--bg);
+  color: var(--text-muted);
+  font-size: 0.88rem;
   cursor: pointer;
-  transition: 0.2s;
+  transition: border-color 0.2s, background 0.2s, color 0.2s;
 }
 
 .file-upload-label:hover {
-  border-color: #2D6A4F;
-  background: rgba(255, 255, 255, 0.5);
-  color: #1B4332;
+  border-color: var(--secondary);
+  background: var(--secondary-light);
+  color: var(--primary);
 }
 
 .file-icon {
@@ -214,56 +249,84 @@ input[type="file"] {
 
 .file-hint {
   font-size: 11.5px;
-  color: #52796F;
+  color: var(--text-light);
   margin-top: 5px;
-  margin-left: 4px;
+  margin-left: 2px;
 }
 
+/* ==========================================
+   SUBMIT BUTTON
+   ========================================== */
 .btn-submit {
   width: 100%;
   padding: 13px;
   border: none;
-  border-radius: 25px;
-  background: #2D6A4F;
+  border-radius: var(--radius);
+  background: var(--primary);
   color: white;
-  font-weight: 600;
+  font-weight: 700;
   font-size: 0.95rem;
   cursor: pointer;
-  margin-top: 10px;
-  transition: background 0.25s, transform 0.2s, box-shadow 0.25s;
-  letter-spacing: 0.3px;
+  margin-top: 8px;
+  transition: background 0.25s, transform 0.2s, box-shadow 0.2s;
+  letter-spacing: 0.2px;
+  font-family: inherit;
 }
 
 .btn-submit:hover {
-  background: #7F5539;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  background: var(--secondary);
+  color: var(--primary);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(56,189,248,0.3);
 }
 
+/* ==========================================
+   FOOTER
+   ========================================== */
 footer {
-  margin-top: 60px;
-  background: rgba(27, 67, 50, 0.92);
+  background: var(--primary);
   color: white;
+  margin-top: 0;
 }
 
 .footer-content {
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
-  padding: 30px 0;
+  gap: 20px;
+  padding: 36px 0;
 }
 
 .footer-content h3,
 .footer-content h4 {
-  color: #95D5B2;
+  color: var(--secondary);
+  margin-bottom: 8px;
+  font-weight: 700;
 }
 
 .footer-content p {
-  font-size: 14px;
-  color: #D8F3DC;
+  font-size: 13.5px;
+  color: rgba(255,255,255,0.7);
+  margin: 4px 0;
 }
 
 .copyright {
   text-align: center;
-  padding: 10px;
+  padding: 14px;
   background: rgba(0,0,0,0.2);
-} 
+  font-size: 12.5px;
+  color: rgba(255,255,255,0.5);
+}
+
+/* ==========================================
+   RESPONSIVE
+   ========================================== */
+@media (max-width: 768px) {
+  .card {
+    padding: 24px 18px;
+  }
+
+  main {
+    margin: 28px auto 40px;
+  }
+}
