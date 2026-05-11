@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Pengelola — Kindnesia</title>
+  <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+
+<header>
+  <div class="container nav">
+    <h1 class="logo">Kindnesia</h1>
+    <nav>
+      <span id="welcomeText" class="welcome-text"></span>
+      <a href="index.html">Beranda</a>
+      <a href="logout.php" class="logout-btn" id="logoutBtn">Logout</a>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+
+  <!-- SUMMARY CARDS -->
+  <section class="summary-grid">
+    <div class="summary-card blue">
+      <div class="summary-icon">📋</div>
+      <div class="summary-info">
+        <div class="summary-num" id="totalKampanye">3</div>
+        <div class="summary-label">Total Kampanye</div>
+      </div>
+    </div>
+    <div class="summary-card green">
+      <div class="summary-icon">✅</div>
+      <div class="summary-info">
+        <div class="summary-num" id="donasiVerified">2</div>
+        <div class="summary-label">Donasi Terverifikasi</div>
+      </div>
+    </div>
+    <div class="summary-card yellow">
+      <div class="summary-icon">⏳</div>
+      <div class="summary-info">
+        <div class="summary-num" id="donasiPending">5</div>
+        <div class="summary-label">Menunggu Verifikasi</div>
+      </div>
+    </div>
+    <div class="summary-card teal">
+      <div class="summary-icon">💰</div>
+      <div class="summary-info">
+        <div class="summary-num" id="totalDana">Rp 50jt</div>
+        <div class="summary-label">Total Dana Terkumpul</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab-btn active" onclick="showTab('kampanye', this)">📋 Kampanye Saya</button>
+    <button class="tab-btn" onclick="showTab('donasi', this)">📥 Donasi Masuk</button>
+  </div>
+
+  <!-- TAB: KAMPANYE -->
+  <section id="tab-kampanye" class="tab-content active">
+    <div class="section-header">
+      <h2>Kampanye Saya</h2>
+      <button class="btn-primary" onclick="showModal()">+ Tambah Kampanye</button>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Judul</th>
+            <th>Kategori</th>
+            <th>Target</th>
+            <th>Terkumpul</th>
+            <th>Progress</th>
+            <th>Deadline</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody id="kampanyeTable">
+          <tr>
+            <td><strong>Reboisasi Hutan Jawa Barat</strong></td>
+            <td><span class="badge">Lingkungan</span></td>
+            <td>Rp 50.000.000</td>
+            <td>Rp 25.000.000</td>
+            <td>
+              <div class="mini-bar"><div style="width:50%"></div></div>
+              <small>50%</small>
+            </td>
+            <td>30 Apr 2026</td>
+            <td>
+              <button class="btn-sm btn-edit" onclick="alert('Edit kampanye')">Edit</button>
+              <button class="btn-sm btn-danger" onclick="alert('Hapus kampanye')">Hapus</button>
+            </td>
+          </tr>
+          <tr>
+            <td><strong>1000 Pohon Kota Sehat</strong></td>
+            <td><span class="badge">Lingkungan</span></td>
+            <td>Rp 30.000.000</td>
+            <td>Rp 10.000.000</td>
+            <td>
+              <div class="mini-bar"><div style="width:33%"></div></div>
+              <small>33%</small>
+            </td>
+            <td>14 Jun 2026</td>
+            <td>
+              <button class="btn-sm btn-edit" onclick="alert('Edit kampanye')">Edit</button>
+              <button class="btn-sm btn-danger" onclick="alert('Hapus kampanye')">Hapus</button>
+            </td>
+          </tr>
+          <tr>
+            <td><strong>Bersih Sungai Nasional</strong></td>
+            <td><span class="badge">Lingkungan</span></td>
+            <td>Rp 20.000.000</td>
+            <td>Rp 15.000.000</td>
+            <td>
+              <div class="mini-bar"><div style="width:75%"></div></div>
+              <small>75%</small>
+            </td>
+            <td>27 Jun 2026</td>
+            <td>
+              <button class="btn-sm btn-edit" onclick="alert('Edit kampanye')">Edit</button>
+              <button class="btn-sm btn-danger" onclick="alert('Hapus kampanye')">Hapus</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- TAB: DONASI -->
+  <section id="tab-donasi" class="tab-content">
+    <div class="section-header">
+      <h2>Donasi Masuk</h2>
+      <div class="filter-inline">
+        <select id="filterStatus" onchange="filterDonasi()">
+          <option value="">Semua Status</option>
+          <option value="pending">Pending</option>
+          <option value="verified">Terverifikasi</option>
+          <option value="rejected">Ditolak</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Donatur</th>
+            <th>Kampanye</th>
+            <th>Nominal</th>
+            <th>Metode</th>
+            <th>Bukti</th>
+            <th>Pesan</th>
+            <th>Status</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody id="donasiTable">
+          <tr data-status="pending">
+            <td>Budi Santoso<br><small>budi@email.com</small></td>
+            <td>Reboisasi Hutan Jawa Barat</td>
+            <td><strong>Rp 50.000</strong></td>
+            <td>Transfer Bank</td>
+            <td><a href="#" class="link-bukti">Lihat Bukti</a></td>
+            <td>Semoga bermanfaat!</td>
+            <td><span class="status-badge pending">Pending</span></td>
+            <td>
+              <button class="btn-sm btn-verify" onclick="updateStatus(this, 'verified')">✓ Verifikasi</button>
+              <button class="btn-sm btn-danger" onclick="updateStatus(this, 'rejected')">✗ Tolak</button>
+            </td>
+          </tr>
+          <tr data-status="verified">
+            <td>Sari Dewi<br><small>sari@email.com</small></td>
+            <td>Bersih Sungai Nasional</td>
+            <td><strong>Rp 100.000</strong></td>
+            <td>QRIS</td>
+            <td><a href="#" class="link-bukti">Lihat Bukti</a></td>
+            <td>-</td>
+            <td><span class="status-badge verified">Terverifikasi</span></td>
+            <td><span class="text-muted">-</span></td>
+          </tr>
+          <tr data-status="pending">
+            <td>Andi Pratama<br><small>andi@email.com</small></td>
+            <td>1000 Pohon Kota Sehat</td>
+            <td><strong>Rp 25.000</strong></td>
+            <td>E-Wallet</td>
+            <td><a href="#" class="link-bukti">Lihat Bukti</a></td>
+            <td>Terus semangat!</td>
+            <td><span class="status-badge pending">Pending</span></td>
+            <td>
+              <button class="btn-sm btn-verify" onclick="updateStatus(this, 'verified')">✓ Verifikasi</button>
+              <button class="btn-sm btn-danger" onclick="updateStatus(this, 'rejected')">✗ Tolak</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+</main>
+
+<!-- MODAL TAMBAH KAMPANYE -->
+<div id="modalOverlay" class="modal-overlay" onclick="hideModal()" style="display:none;">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-header">
+      <h3>Tambah Kampanye Baru</h3>
+      <button class="modal-close" onclick="hideModal()">✕</button>
+    </div>
+    <form id="kampanyeForm" onsubmit="submitKampanye(event)">
+      <div class="form-group">
+        <label>Judul Kampanye</label>
+        <input type="text" placeholder="Judul kampanye Anda" required>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Kategori</label>
+          <select required>
+            <option value="">Pilih Kategori</option>
+            <option>Lingkungan</option>
+            <option>Kesehatan</option>
+            <option>Pendidikan</option>
+            <option>Bencana</option>
+            <option>Fasilitas Umum</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Lokasi</label>
+          <input type="text" placeholder="Kota, Provinsi">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Target Dana (Rp)</label>
+          <input type="number" placeholder="50000000" min="100000" required>
+        </div>
+        <div class="form-group">
+          <label>Deadline</label>
+          <input type="date" required>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Deskripsi</label>
+        <textarea rows="3" placeholder="Ceritakan kampanye Anda..."></textarea>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn-secondary" onclick="hideModal()">Batal</button>
+        <button type="submit" class="btn-primary">Simpan Kampanye</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-content container">
+    <div>
+      <h3>Kindnesia</h3>
+      <p>Platform donasi untuk lingkungan yang lebih baik.</p>
+    </div>
+  </div>
+  <div class="copyright">
+    <p>© 2026 Kindnesia | Copyright by Kelompok Gatau</p>
+  </div>
+</footer>
+
+<script>
+  // Tampilkan nama pengelola dari sessionStorage
+  (function () {
+    // Cukup tampilkan nama kalau ada di sessionStorage
+    // TIDAK redirect paksa — biar PHP session yang handle auth
+    try {
+      const raw = sessionStorage.getItem('kindnesia_user');
+      if (raw) {
+        const user = JSON.parse(raw);
+        const el = document.getElementById('welcomeText');
+        if (el && user.nama) el.textContent = '👤 ' + user.nama;
+      }
+    } catch (_) {}
+  })();
+
+  // Tab switching
+  function showTab(name, btn) {
+    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + name).classList.add('active');
+    btn.classList.add('active');
+  }
+
+  // Modal
+  function showModal() {
+    document.getElementById('modalOverlay').style.display = 'flex';
+  }
+  function hideModal() {
+    document.getElementById('modalOverlay').style.display = 'none';
+  }
+
+  // Submit kampanye (placeholder)
+  function submitKampanye(e) {
+    e.preventDefault();
+    alert('Kampanye berhasil ditambahkan! (Hubungkan ke PHP untuk fungsionalitas penuh)');
+    hideModal();
+  }
+
+  // Filter donasi
+  function filterDonasi() {
+    const val = document.getElementById('filterStatus').value;
+    document.querySelectorAll('#donasiTable tr').forEach(row => {
+      const status = row.dataset.status || '';
+      row.style.display = (!val || status === val) ? '' : 'none';
+    });
+  }
+
+  // Update status donasi
+  function updateStatus(btn, newStatus) {
+    const row = btn.closest('tr');
+    row.dataset.status = newStatus;
+    const badgeEl = row.querySelector('.status-badge');
+    const actionCell = row.querySelector('td:last-child');
+
+    if (newStatus === 'verified') {
+      badgeEl.className = 'status-badge verified';
+      badgeEl.textContent = 'Terverifikasi';
+    } else {
+      badgeEl.className = 'status-badge rejected';
+      badgeEl.textContent = 'Ditolak';
+    }
+    actionCell.innerHTML = '<span class="text-muted">-</span>';
+  }
+
+  // Logout
+  document.getElementById('logoutBtn').addEventListener('click', function (e) {
+    e.preventDefault();
+    sessionStorage.removeItem('kindnesia_user');
+    window.location.href = 'logout.php';
+  });
+</script>
+
+</body>
+</html>

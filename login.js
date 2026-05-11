@@ -62,17 +62,19 @@
         body:    JSON.stringify({ username, password, role: currentRole }),
       });
 
+      // Baca body SEKALI sebagai teks — hindari error "body already used"
+      const rawText = await resp.text();
+
       if (!resp.ok) {
-        const text = await resp.text();
-        throw new Error('HTTP ' + resp.status + ': ' + text.substring(0, 300));
+        throw new Error('HTTP ' + resp.status + ': ' + rawText.substring(0, 300));
       }
 
+      // Parse JSON dari string mentah
       let data;
       try {
-        data = await resp.json();
+        data = JSON.parse(rawText);
       } catch (_) {
-        const text = await resp.clone().text();
-        throw new Error('Response bukan JSON: ' + text.substring(0, 300));
+        throw new Error('Response bukan JSON. Output PHP: ' + rawText.substring(0, 300));
       }
 
       if (data.success) {
@@ -88,7 +90,7 @@
 
     } catch (err) {
       console.error('Login error:', err);
-      showMsg('Tidak dapat terhubung ke server. Detail: ' + err.message, true);
+      showMsg('Login gagal. Detail: ' + err.message, true);
       setLoading(false);
     }
   }
@@ -100,16 +102,7 @@
     el.addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
   });
 
-  // ── Cek jika sudah login ──────────────────────────────────────
-  (async function checkLoginStatus() {
-    try {
-      const resp = await fetch('login.php?check=1');
-      if (!resp.ok) return;
-      const data = await resp.json();
-      if (data.logged_in) {
-        window.location.href = data.user.role === 'pengelola' ? 'dashboard.html' : 'index.html';
-      }
-    } catch (_) { /* server belum berjalan */ }
-  })();
+  // Auto-redirect dihapus — mencegah redirect loop (ngeblink)
+  // Redirect hanya terjadi setelah user klik tombol login
 
 })();

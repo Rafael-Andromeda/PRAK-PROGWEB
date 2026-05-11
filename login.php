@@ -1,5 +1,5 @@
 <?php
-// login.php — Handler Login Kindnesia
+// login.php — Handler Login Kindnesia (FIXED)
 require_once 'config.php';
 
 header('Content-Type: application/json; charset=utf-8');
@@ -24,13 +24,13 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
 // ── BACA INPUT (JSON body atau form biasa) ────────────────────────
 $input    = json_decode(file_get_contents('php://input'), true) ?: $_POST;
-$email    = trim($input['username'] ?? '');   // field dari login.js bernama 'username'
+$login    = trim($input['username'] ?? '');  // bisa email atau username
 $password = trim($input['password'] ?? '');
 $role     = trim($input['role']     ?? '');
 
 // ── VALIDASI ──────────────────────────────────────────────────────
-if ($email === '' || $password === '') {
-    echo json_encode(['success' => false, 'message' => 'Email dan password wajib diisi.']);
+if ($login === '' || $password === '') {
+    echo json_encode(['success' => false, 'message' => 'Email/username dan password wajib diisi.']);
     exit;
 }
 
@@ -39,34 +39,47 @@ if (!in_array($role, ['donatur', 'pengelola'])) {
     exit;
 }
 
-// ── QUERY KE TABEL users ──────────────────────────────────────────
-$db   = getDB();
-$stmt = $db->prepare(
-    "SELECT id, nama, email, password, role
-     FROM users
-     WHERE email = ? AND role = ?
-     LIMIT 1"
-);
+// ── QUERY KE TABEL YANG SESUAI ROLE ──────────────────────────────
+// Skema DB: tabel 'donatur' dan 'pengelola' (tidak ada tabel 'users')
+$db = getDB();
+
+if ($role === 'donatur') {
+    $stmt = $db->prepare(
+        "SELECT id, nama, email, password
+         FROM donatur
+         WHERE email = ? OR username = ?
+         LIMIT 1"
+    );
+    $stmt->bind_param("ss", $login, $login);
+} else {
+    // pengelola
+    $stmt = $db->prepare(
+        "SELECT id, nama_pengelola AS nama, email, password
+         FROM pengelola
+         WHERE email = ? OR username = ?
+         LIMIT 1"
+    );
+    $stmt->bind_param("ss", $login, $login);
+}
 
 if (!$stmt) {
-    echo json_encode(['success' => false, 'message' => 'Prepare error: ' . $db->error]);
+    echo json_encode(['success' => false, 'message' => 'DB prepare error: ' . $db->error]);
     $db->close();
     exit;
 }
 
-$stmt->bind_param("ss", $email, $role);
 $stmt->execute();
 $row = $stmt->get_result()->fetch_assoc();
 $stmt->close();
 $db->close();
 
-// ── CEK USER ──────────────────────────────────────────────────────
+// ── USER TIDAK DITEMUKAN ──────────────────────────────────────────
 if (!$row) {
-    echo json_encode(['success' => false, 'message' => 'Akun tidak ditemukan. Periksa email dan role Anda.']);
+    echo json_encode(['success' => false, 'message' => 'Akun tidak ditemukan. Periksa email/username dan role Anda.']);
     exit;
 }
 
-// ── CEK PASSWORD (dukung plain text dan password_hash) ────────────
+// ── CEK PASSWORD (plain text & password_hash) ─────────────────────
 $valid = password_verify($password, $row['password'])
       || ($password === $row['password']);
 
@@ -79,10 +92,10 @@ if (!$valid) {
 $_SESSION['user_id']    = $row['id'];
 $_SESSION['user_nama']  = $row['nama'];
 $_SESSION['user_email'] = $row['email'];
-$_SESSION['user_role']  = $row['role'];
+$_SESSION['user_role']  = $role; // hardcode dari input karena kolom role tidak ada di tabel
 
-// Redirect: pengelola ke dashboard, donatur ke index
-$redirect = ($row['role'] === 'pengelola') ? 'dashboard.html' : 'index.html';
+// Donatur ke index, pengelola ke dashboard
+$redirect = ($role === 'pengelola') ? 'dashboard.html' : 'index.html';
 
 echo json_encode([
     'success'  => true,
@@ -92,7 +105,7 @@ echo json_encode([
         'id'    => $row['id'],
         'nama'  => $row['nama'],
         'email' => $row['email'],
-        'role'  => $row['role'],
+        'role'  => $role,
     ],
 ]);
 ?>
