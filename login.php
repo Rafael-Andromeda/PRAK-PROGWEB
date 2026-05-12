@@ -95,7 +95,7 @@ $_SESSION['user_email'] = $row['email'];
 $_SESSION['user_role']  = $role; // hardcode dari input karena kolom role tidak ada di tabel
 
 // Donatur ke index, pengelola ke dashboard
-$redirect = ($role === 'pengelola') ? 'dashboard.html' : 'index.html';
+$redirect = ($role === 'pengelola') ? 'dashboard.php' : 'index.php';
 
 echo json_encode([
     'success'  => true,

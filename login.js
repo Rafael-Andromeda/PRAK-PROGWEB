@@ -49,7 +49,7 @@
     const username = usernameEl.value.trim();
     const password = passwordEl.value.trim();
 
-    if (!username) { showMsg('Email wajib diisi.', true); usernameEl.focus(); return; }
+    if (!username) { showMsg('Username atau email wajib diisi.', true); usernameEl.focus(); return; }
     if (!password) { showMsg('Password wajib diisi.', true); passwordEl.focus(); return; }
 
     setLoading(true);
