@@ -170,17 +170,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// ── AMBIL DATA KAMPANYE PENGELOLA ─────────────────────────────────
+// ── AMBIL DATA KAMPANYE ───────────────────────────────────────────
 $stmtK = $db->prepare(
-    "SELECT id, judul, kategori, target_dana, dana_terkumpul, deadline
-     FROM kampanye WHERE pengelola_id=? ORDER BY created_at DESC"
+    "SELECT id, pengelola_id, judul, kategori, target_dana, dana_terkumpul, deadline
+     FROM kampanye ORDER BY created_at DESC"
 );
-$stmtK->bind_param("i", $user['id']);
 $stmtK->execute();
 $kampanyes = $stmtK->get_result()->fetch_all(MYSQLI_ASSOC);
 $stmtK->close();
 
-// ── AMBIL DONASI DI KAMPANYE PENGELOLA ───────────────────────────
+// ── AMBIL SEMUA DONASI ────────────────────────────────────────────
 $stmtD = $db->prepare(
     "SELECT d.id, d.nominal, d.metode, d.status, d.pesan, d.bukti_file, d.created_at, d.verified_at,
             dt.nama AS donatur_nama, dt.email AS donatur_email,
@@ -188,10 +187,8 @@ $stmtD = $db->prepare(
      FROM donasi d
      JOIN donatur dt ON dt.id = d.donatur_id
      JOIN kampanye k ON k.id = d.kampanye_id
-     WHERE k.pengelola_id=?
      ORDER BY d.created_at DESC"
 );
-$stmtD->bind_param("i", $user['id']);
 $stmtD->execute();
 $donasis = $stmtD->get_result()->fetch_all(MYSQLI_ASSOC);
 $stmtD->close();
@@ -299,14 +296,14 @@ $KATEGORI_LIST = ['Lingkungan','Kesehatan','Pendidikan','Bencana','Fasilitas Umu
 
   <!-- TABS -->
   <div class="tabs">
-    <button class="tab-btn active" onclick="showTab('kampanye', this)">📋 Kampanye Saya</button>
+    <button class="tab-btn active" onclick="showTab('kampanye', this)">📋 Semua Kampanye</button>
     <button class="tab-btn" onclick="showTab('donasi', this)">📥 Donasi Masuk</button>
   </div>
 
   <!-- TAB: KAMPANYE -->
   <section id="tab-kampanye" class="tab-content active">
     <div class="section-header">
-      <h2>Kampanye Saya</h2>
+      <h2>Semua Kampanye</h2>
       <button class="btn-primary" onclick="openModal('modalTambah')">+ Tambah Kampanye</button>
     </div>
 
@@ -334,6 +331,7 @@ $KATEGORI_LIST = ['Lingkungan','Kesehatan','Pendidikan','Bencana','Fasilitas Umu
             </td>
             <td><?= date('d/m/Y', strtotime($k['deadline'])) ?> <small>(<?= $sisa ?> hr)</small></td>
             <td>
+              <?php if ($k['pengelola_id'] == $user['id']): ?>
               <button class="btn-sm btn-edit"
                 onclick="openEdit(<?= $k['id'] ?>, <?= htmlspecialchars(json_encode($k)) ?>)">Edit</button>
               <form method="POST" style="display:inline"
@@ -342,6 +340,9 @@ $KATEGORI_LIST = ['Lingkungan','Kesehatan','Pendidikan','Bencana','Fasilitas Umu
                 <input type="hidden" name="kampanye_id" value="<?= $k['id'] ?>">
                 <button type="submit" class="btn-sm btn-danger">Hapus</button>
               </form>
+              <?php else: ?>
+              <span style="color:#888;font-size:.85rem;display:inline-block;margin-right:8px;">Tidak bisa diedit</span>
+              <?php endif; ?>
               <a href="donatur_kampanye.php?id=<?= $k['id'] ?>" class="btn-sm" style="background:#3b82f6;color:#fff;padding:5px 10px;border-radius:6px;text-decoration:none;font-size:.8rem;">Donatur</a>
             </td>
           </tr>
