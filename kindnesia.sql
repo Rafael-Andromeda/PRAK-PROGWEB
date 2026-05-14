@@ -71,8 +71,8 @@ CREATE TABLE IF NOT EXISTS donasi (
   bukti_file    VARCHAR(300)  DEFAULT NULL,   -- path file bukti transfer
   pesan         TEXT          DEFAULT NULL,
   status        ENUM('pending','verified','rejected') NOT NULL DEFAULT 'pending',
-  created_at    TIMESTAMP     DEFAULT CURRENT_TIMESTAMP,
-  verified_at   TIMESTAMP     DEFAULT NULL,
+  created_at    TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  verified_at   DATETIME      DEFAULT NULL,
   FOREIGN KEY (kampanye_id)  REFERENCES kampanye(id)  ON DELETE CASCADE,
   FOREIGN KEY (donatur_id)   REFERENCES donatur(id)   ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
