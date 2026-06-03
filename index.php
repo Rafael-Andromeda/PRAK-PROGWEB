@@ -1,30 +1,31 @@
 <?php
-// index.php — Halaman Utama Kindnesia (Dinamis)
+// Halaman Utama Kindnesia (Dinamis)
 require_once 'config.php';
 
-// ── CEK STATUS LOGIN ──────────────────────────────────────────────
+// Cek status login
 $user = isLoggedIn() ? currentUser() : null;
 
-// ── PARAMETER SEARCH & PAGINATION ────────────────────────────────
+// Parameter search & pagination
 $keyword  = trim($_GET['q']      ?? '');
 $kategori = trim($_GET['kategori'] ?? '');
 $lokasi   = trim($_GET['lokasi'] ?? '');
+$tanggal  = trim($_GET['tanggal'] ?? ''); // opsional: filter tanggal/deadline kampanye
 $page     = max(1, intval($_GET['page'] ?? 1));
 $perPage  = 6;
 $offset   = ($page - 1) * $perPage;
 
-// ── QUERY KAMPANYE DARI DB ────────────────────────────────────────
+// Query kampanye dari DB
 $db = getDB();
 
-$where  = ["k.deadline >= CURDATE()"];
+$where  = ["k.deadline >= CURDATE()", "k.dana_terkumpul < k.target_dana"];
 $params = [];
 $types  = "";
 
 if ($keyword !== '') {
-    $where[]  = "(k.judul LIKE ? OR k.kategori LIKE ? OR k.lokasi LIKE ?)";
+    $where[]  = "(k.judul LIKE ? OR k.kategori LIKE ? OR k.lokasi LIKE ? OR DATE_FORMAT(k.deadline, '%Y-%m-%d') LIKE ? OR DATE_FORMAT(k.deadline, '%d-%m-%Y') LIKE ?)";
     $like     = "%$keyword%";
-    $params[] = $like; $params[] = $like; $params[] = $like;
-    $types   .= "sss";
+    $params[] = $like; $params[] = $like; $params[] = $like; $params[] = $like; $params[] = $like;
+    $types   .= "sssss";
 }
 if ($kategori !== '') {
     $where[]  = "k.kategori = ?";
@@ -34,6 +35,11 @@ if ($kategori !== '') {
 if ($lokasi !== '') {
     $where[]  = "k.lokasi LIKE ?";
     $params[] = "%$lokasi%";
+    $types   .= "s";
+}
+if ($tanggal !== '') {
+    $where[]  = "k.deadline = ?";
+    $params[] = $tanggal;
     $types   .= "s";
 }
 
@@ -48,7 +54,7 @@ $totalRows = $stmtCount->get_result()->fetch_row()[0];
 $stmtCount->close();
 $totalPages = max(1, ceil($totalRows / $perPage));
 
-// Ambil data kampanye — urut: deadline terdekat, dana terkumpul terkecil
+// Ambil data kampanye, urut: deadline terdekat, dana terkumpul terkecil
 $sql  = "SELECT k.id, k.judul, k.kategori, k.lokasi, k.gambar,
                 k.target_dana, k.dana_terkumpul, k.deadline,
                 p.nama_pengelola
@@ -66,7 +72,7 @@ $kampanyes = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 $stmt->close();
 $db->close();
 
-// ── HELPER ────────────────────────────────────────────────────────
+// Helper
 function rupiahFormat($num) {
     if ($num >= 1000000) return 'Rp ' . number_format($num / 1000000, 1) . ' Jt';
     if ($num >= 1000)    return 'Rp ' . number_format($num / 1000, 0) . ' Rb';
@@ -87,7 +93,7 @@ function progressPct($terkumpul, $target) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kindnesia - Crowdfunding Sosial</title>
-    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="assets/css/index.css">
     <style>
         .pagination { display:flex; justify-content:center; gap:8px; margin:32px 0; flex-wrap:wrap; }
         .pagination a, .pagination span {
@@ -134,7 +140,7 @@ function progressPct($terkumpul, $target) {
 <!-- SEARCH FORM -->
 <section class="filter container">
     <form method="GET" action="index.php" style="display:contents">
-        <input type="text" name="q" placeholder="Cari judul kampanye..."
+        <input type="text" name="q" placeholder="Cari judul/kategori/lokasi/tanggal..."
                value="<?= htmlspecialchars($keyword) ?>">
         <select name="kategori">
             <option value="">Semua Kategori</option>
@@ -144,20 +150,22 @@ function progressPct($terkumpul, $target) {
         </select>
         <input type="text" name="lokasi" placeholder="Lokasi"
                value="<?= htmlspecialchars($lokasi) ?>">
+        <input type="date" name="tanggal" value="<?= htmlspecialchars($tanggal) ?>" title="Filter berdasarkan deadline kampanye">
         <button type="submit">🔍 Cari</button>
-        <?php if ($keyword || $kategori || $lokasi): ?>
+        <?php if ($keyword || $kategori || $lokasi || $tanggal): ?>
             <a href="index.php" style="padding:8px 14px;background:#eee;border-radius:8px;text-decoration:none;color:#555">✕ Reset</a>
         <?php endif; ?>
     </form>
 </section>
 
 <!-- HASIL SEARCH INFO -->
-<?php if ($keyword || $kategori || $lokasi): ?>
+<?php if ($keyword || $kategori || $lokasi || $tanggal): ?>
 <div class="container" style="margin-bottom:8px;color:#555;font-size:.9rem;">
     Menampilkan <strong><?= $totalRows ?></strong> kampanye
-    <?= $keyword ? "untuk kata kunci \"<em>$keyword</em>\"" : '' ?>
-    <?= $kategori ? "| Kategori: <em>$kategori</em>" : '' ?>
-    <?= $lokasi ? "| Lokasi: <em>$lokasi</em>" : '' ?>
+    <?= $keyword ? "untuk kata kunci \"<em>" . htmlspecialchars($keyword) . "</em>\"" : '' ?>
+    <?= $kategori ? "| Kategori: <em>" . htmlspecialchars($kategori) . "</em>" : '' ?>
+    <?= $lokasi ? "| Lokasi: <em>" . htmlspecialchars($lokasi) . "</em>" : '' ?>
+    <?= $tanggal ? "| Deadline: <em>" . htmlspecialchars($tanggal) . "</em>" : '' ?>
 </div>
 <?php endif; ?>
 
@@ -174,11 +182,11 @@ function progressPct($terkumpul, $target) {
     <?php foreach ($kampanyes as $k):
         $pct   = progressPct($k['dana_terkumpul'], $k['target_dana']);
         $sisa  = sisaHari($k['deadline']);
-        $imgSrc = $k['gambar'] ? 'uploads/kampanye/' . htmlspecialchars($k['gambar']) : 'https://via.placeholder.com/400x220?text=Kindnesia';
+        $imgSrc = $k['gambar'] ? 'uploads/kampanye/' . htmlspecialchars($k['gambar']) : 'assets/img/placeholder.svg';
     ?>
     <div class="card glass">
         <img src="<?= $imgSrc ?>" alt="<?= htmlspecialchars($k['judul']) ?>"
-             onerror="this.src='https://via.placeholder.com/400x220?text=Kindnesia'">
+             onerror="this.src='assets/img/placeholder.svg'">
         <div class="card-body">
             <span class="badge"><?= htmlspecialchars($k['kategori']) ?></span>
             <h3><a href="details.php?id=<?= $k['id'] ?>"><?= htmlspecialchars($k['judul']) ?></a></h3>
@@ -206,7 +214,7 @@ function progressPct($terkumpul, $target) {
 <?php if ($totalPages > 1): ?>
 <div class="pagination">
     <?php
-    $qBase = http_build_query(array_filter(['q'=>$keyword,'kategori'=>$kategori,'lokasi'=>$lokasi]));
+    $qBase = http_build_query(array_filter(['q'=>$keyword,'kategori'=>$kategori,'lokasi'=>$lokasi,'tanggal'=>$tanggal]));
     $qBase = $qBase ? "&$qBase" : "";
     ?>
     <?php if ($page > 1): ?>
@@ -239,5 +247,6 @@ function progressPct($terkumpul, $target) {
     </div>
 </footer>
 
+<script src="assets/js/index.js"></script>
 </body>
 </html>

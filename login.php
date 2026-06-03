@@ -1,11 +1,10 @@
 <?php
-// login.php — Handler Login Kindnesia (FIXED)
 require_once 'config.php';
 
 header('Content-Type: application/json; charset=utf-8');
 header('Cache-Control: no-cache');
 
-// ── CEK STATUS LOGIN (GET ?check=1) ──────────────────────────────
+// CEK STATUS LOGIN (GET ?check=1)
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['check'])) {
     echo json_encode(
         isLoggedIn()
@@ -15,20 +14,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['check'])) {
     exit;
 }
 
-// ── HANYA TERIMA POST ─────────────────────────────────────────────
+// HANYA TERIMA POST
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
     echo json_encode(['success' => false, 'message' => 'Method tidak diizinkan.']);
     exit;
 }
 
-// ── BACA INPUT (JSON body atau form biasa) ────────────────────────
+// BACA INPUT (JSON body atau form biasa)
 $input    = json_decode(file_get_contents('php://input'), true) ?: $_POST;
 $login    = trim($input['username'] ?? '');  // bisa email atau username
 $password = trim($input['password'] ?? '');
 $role     = trim($input['role']     ?? '');
 
-// ── VALIDASI ──────────────────────────────────────────────────────
+// VALIDASI
 if ($login === '' || $password === '') {
     echo json_encode(['success' => false, 'message' => 'Email/username dan password wajib diisi.']);
     exit;
@@ -39,7 +38,7 @@ if (!in_array($role, ['donatur', 'pengelola'])) {
     exit;
 }
 
-// ── QUERY KE TABEL YANG SESUAI ROLE ──────────────────────────────
+// QUERY KE TABEL YANG SESUAI ROLE
 // Skema DB: tabel 'donatur' dan 'pengelola' (tidak ada tabel 'users')
 $db = getDB();
 
@@ -73,13 +72,13 @@ $row = $stmt->get_result()->fetch_assoc();
 $stmt->close();
 $db->close();
 
-// ── USER TIDAK DITEMUKAN ──────────────────────────────────────────
+// USER TIDAK DITEMUKAN
 if (!$row) {
     echo json_encode(['success' => false, 'message' => 'Akun tidak ditemukan. Periksa email/username dan role Anda.']);
     exit;
 }
 
-// ── CEK PASSWORD (plain text & password_hash) ─────────────────────
+// CEK PASSWORD (plain text & password_hash)
 $valid = password_verify($password, $row['password'])
       || ($password === $row['password']);
 
@@ -88,7 +87,7 @@ if (!$valid) {
     exit;
 }
 
-// ── SIMPAN SESSION ────────────────────────────────────────────────
+// SIMPAN SESSION
 $_SESSION['user_id']    = $row['id'];
 $_SESSION['user_nama']  = $row['nama'];
 $_SESSION['user_email'] = $row['email'];

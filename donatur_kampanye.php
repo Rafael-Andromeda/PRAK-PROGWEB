@@ -1,5 +1,4 @@
 <?php
-// donatur_kampanye.php — Pengelola melihat daftar donatur per kampanye
 require_once 'config.php';
 
 if (!isLoggedIn() || currentUser()['role'] !== 'pengelola') {
@@ -43,8 +42,8 @@ function rp($n) { return 'Rp ' . number_format($n, 0, ',', '.'); }
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Donatur Kampanye — Kindnesia</title>
-  <link rel="stylesheet" href="dashboard.css">
+  <title>Donatur Kampanye - Kindnesia</title>
+  <link rel="stylesheet" href="assets/css/dashboard.css">
   <style>
     .badge-pending  { background:#FEF9C3; color:#854D0E; padding:3px 10px; border-radius:20px; font-size:.8rem; font-weight:700; }
     .badge-verified { background:#DCFCE7; color:#166534; padding:3px 10px; border-radius:20px; font-size:.8rem; font-weight:700; }
@@ -83,7 +82,7 @@ function rp($n) { return 'Rp ' . number_format($n, 0, ',', '.'); }
             <?php else: ?><span class="badge-rejected">❌ Ditolak</span>
             <?php endif; ?>
           </td>
-          <td style="font-size:.82rem;color:#666"><?= $r['pesan'] ? htmlspecialchars(mb_substr($r['pesan'],0,60)) . '…' : '—' ?></td>
+          <td style="font-size:.82rem;color:#666"><?= $r['pesan'] ? htmlspecialchars(substr($r['pesan'],0,60)) . '…' : '—' ?></td>
           <td style="font-size:.8rem"><?= date('d/m/Y', strtotime($r['created_at'])) ?></td>
           <td>
             <?php if ($r['bukti_file']): ?>

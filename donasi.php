@@ -1,11 +1,10 @@
 <?php
-// donasi.php — Halaman Donasi Kindnesia
 require_once 'config.php';
 
 // Wajib login sebagai donatur
 if (!isLoggedIn()) {
     $id = intval($_GET['id'] ?? 0);
-    header('Location: login.html?redirect=donasi.php' . ($id ? "?id=$id" : ''));
+    header('Location: login.html?redirect=' . urlencode('donasi.php' . ($id ? "?id=$id" : '')));
     exit;
 }
 $user = currentUser();
@@ -42,7 +41,7 @@ $stmt->execute();
 $donatur = $stmt->get_result()->fetch_assoc();
 $stmt->close();
 
-// ── PROSES SUBMIT DONASI ──────────────────────────────────────────
+// PROSES SUBMIT DONASI
 $error   = '';
 $success = false;
 
@@ -73,11 +72,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $uploadDir = 'uploads/bukti/';
             if (!is_dir($uploadDir)) mkdir($uploadDir, 0755, true);
 
-            $filename  = 'bukti_' . time() . '_' . $user['id'] . '.' . $ext;
+            $filename  = 'bukti_' . time() . '_' . $user['id'] . '_' . random_int(1000, 9999) . '.' . $ext;
             $destPath  = $uploadDir . $filename;
 
             if (move_uploaded_file($file['tmp_name'], $destPath)) {
-                // Insert ke DB — status PENDING
+                // Insert ke DB - status PENDING
                 $stmt = $db->prepare(
                     "INSERT INTO donasi (kampanye_id, donatur_id, nominal, metode, bukti_file, pesan, status)
                      VALUES (?, ?, ?, ?, ?, ?, 'pending')"
@@ -101,14 +100,19 @@ function rp($num) {
     return 'Rp ' . number_format($num, 0, ',', '.');
 }
 $pct = $kampanye['target_dana'] > 0 ? min(100, round($kampanye['dana_terkumpul'] / $kampanye['target_dana'] * 100)) : 0;
+
+$metodeOptions = array_values(array_filter(array_map('trim', explode(',', $kampanye['metode_donasi'] ?: 'Transfer Bank, E-Wallet, QRIS'))));
+if (empty($metodeOptions)) {
+    $metodeOptions = ['Transfer Bank', 'E-Wallet', 'QRIS'];
+}
 ?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Donasi — <?= htmlspecialchars($kampanye['judul']) ?> | Kindnesia</title>
-    <link rel="stylesheet" href="donasi.css">
+    <title>Donasi - <?= htmlspecialchars($kampanye['judul']) ?> | Kindnesia</title>
+    <link rel="stylesheet" href="assets/css/donasi.css">
     <style>
         .alert-error   { background:#FEF2F2; border:1.5px solid #FCA5A5; color:#DC2626; border-radius:10px; padding:14px 18px; margin-bottom:18px; font-weight:500; }
         .alert-success { background:#F0FDF4; border:1.5px solid #86EFAC; color:#166534; border-radius:10px; padding:18px; margin-bottom:18px; font-weight:600; text-align:center; }
@@ -211,10 +215,11 @@ $pct = $kampanye['target_dana'] > 0 ? min(100, round($kampanye['dana_terkumpul']
                 <label for="metode">Metode Pembayaran</label>
                 <select id="metode" name="metode" required>
                     <option value="">Pilih Metode</option>
-                    <option <?= ($_POST['metode'] ?? '') === 'Transfer Bank (BCA / BNI / Mandiri)' ? 'selected' : '' ?>>Transfer Bank (BCA / BNI / Mandiri)</option>
-                    <option <?= ($_POST['metode'] ?? '') === 'E-Wallet (OVO, DANA, GoPay)' ? 'selected' : '' ?>>E-Wallet (OVO, DANA, GoPay)</option>
-                    <option <?= ($_POST['metode'] ?? '') === 'QRIS' ? 'selected' : '' ?>>QRIS</option>
+                    <?php foreach ($metodeOptions as $opt): ?>
+                        <option value="<?= htmlspecialchars($opt) ?>" <?= ($_POST['metode'] ?? '') === $opt ? 'selected' : '' ?>><?= htmlspecialchars($opt) ?></option>
+                    <?php endforeach; ?>
                 </select>
+                <p class="file-hint">Metode tersedia dari kampanye ini: <?= htmlspecialchars($kampanye['metode_donasi'] ?: 'Transfer Bank, E-Wallet, QRIS') ?></p>
             </div>
 
             <!-- BUKTI TRANSFER -->
@@ -222,7 +227,7 @@ $pct = $kampanye['target_dana'] > 0 ? min(100, round($kampanye['dana_terkumpul']
                 <label for="bukti">Bukti Transfer <span style="color:#e74c3c">*</span></label>
                 <div class="file-upload-wrapper">
                     <input type="file" id="bukti" name="bukti" accept=".jpg,.jpeg,.png,.pdf" required
-                           onchange="document.getElementById('fileNameDisplay').textContent = this.files[0]?.name || 'Pilih file'">
+                          >
                     <label for="bukti" class="file-upload-label">
                         <span id="fileNameDisplay">Pilih file (JPG / PNG / PDF)</span>
                     </label>
@@ -254,23 +259,6 @@ $pct = $kampanye['target_dana'] > 0 ? min(100, round($kampanye['dana_terkumpul']
     </div>
 </footer>
 
-<script>
-function setNominal(val, el) {
-    document.getElementById('nominalInput').value = val;
-    document.querySelectorAll('.nominal-btn').forEach(b => b.classList.remove('active'));
-    el.classList.add('active');
-}
-function clearNominalBtn() {
-    document.querySelectorAll('.nominal-btn').forEach(b => b.classList.remove('active'));
-}
-// Validasi sisi klien
-document.getElementById('donasiForm')?.addEventListener('submit', function(e) {
-    const nom = parseInt(document.getElementById('nominalInput').value);
-    if (!nom || nom < 10000) {
-        e.preventDefault();
-        alert('Nominal donasi minimal Rp 10.000');
-    }
-});
-</script>
+<script src="assets/js/donasi.js"></script>
 </body>
 </html>

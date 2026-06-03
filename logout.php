@@ -1,5 +1,4 @@
 <?php
-// logout.php — Handler Logout Kindnesia
 require_once 'config.php';
 
 $_SESSION = [];

@@ -1,5 +1,4 @@
 <?php
-// riwayat_donasi.php — Riwayat Donasi Donatur (BONUS)
 require_once 'config.php';
 
 if (!isLoggedIn() || currentUser()['role'] !== 'donatur') {
@@ -41,8 +40,8 @@ function rp($n) { return 'Rp ' . number_format($n, 0, ',', '.'); }
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Riwayat Donasi — Kindnesia</title>
-  <link rel="stylesheet" href="index.css">
+  <title>Riwayat Donasi - Kindnesia</title>
+  <link rel="stylesheet" href="assets/css/index.css">
   <style>
     .riwayat-container { max-width:900px; margin:32px auto; padding:0 16px; }
     .summary-box { display:flex; gap:16px; flex-wrap:wrap; margin-bottom:28px; }

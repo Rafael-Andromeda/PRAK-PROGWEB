@@ -1,5 +1,4 @@
 <?php
-// details.php — Halaman Detail Kampanye (Dinamis)
 require_once 'config.php';
 
 $user = isLoggedIn() ? currentUser() : null;
@@ -26,7 +25,7 @@ if (!$k) { header('Location: index.php'); exit; }
 $pct      = $k['target_dana'] > 0 ? min(100, round($k['dana_terkumpul'] / $k['target_dana'] * 100)) : 0;
 $sisaHari = max(0, intval((strtotime($k['deadline']) - strtotime(date('Y-m-d'))) / 86400));
 $deadlineStr = date('d F Y', strtotime($k['deadline']));
-$imgSrc   = $k['gambar'] ? 'uploads/kampanye/' . htmlspecialchars($k['gambar']) : 'https://via.placeholder.com/800x400?text=Kindnesia';
+$imgSrc   = $k['gambar'] ? 'uploads/kampanye/' . htmlspecialchars($k['gambar']) : 'assets/img/placeholder.svg';
 
 function rp($num) {
     return 'Rp ' . number_format($num, 0, ',', '.');
@@ -37,8 +36,8 @@ function rp($num) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= htmlspecialchars($k['judul']) ?> — Kindnesia</title>
-    <link rel="stylesheet" href="details.css">
+    <title><?= htmlspecialchars($k['judul']) ?> - Kindnesia</title>
+    <link rel="stylesheet" href="assets/css/details.css">
     <style>
         .user-info { color:#fff; font-size:.9rem; margin-right:8px; }
         .logout-btn { background:#e74c3c; color:#fff !important; padding:6px 14px; border-radius:8px; }
@@ -68,7 +67,7 @@ function rp($num) {
 <main>
     <div class="image">
         <img src="<?= $imgSrc ?>" alt="<?= htmlspecialchars($k['judul']) ?>"
-             onerror="this.src='https://via.placeholder.com/800x400?text=Kindnesia'">
+             onerror="this.src='assets/img/placeholder.svg'">
     </div>
 
     <div class="card">
@@ -143,7 +142,7 @@ function rp($num) {
                     <?php elseif ($user && $user['role'] === 'pengelola'): ?>
                         <p style="color:#e67e22;margin-top:12px;font-size:.9rem;">⚠ Pengelola tidak dapat berdonasi.</p>
                     <?php else: ?>
-                        <a href="login.html?redirect=donasi.php?id=<?= $k['id'] ?>" class="donate-btn-main" style="display:inline-block;padding:12px 28px;background:#4CAF50;color:#fff;border-radius:10px;text-decoration:none;font-weight:700;margin-top:12px;">Donasi Sekarang</a>
+                        <a href="login.html?redirect=<?= urlencode('donasi.php?id=' . $k['id']) ?>" class="donate-btn-main" style="display:inline-block;padding:12px 28px;background:#4CAF50;color:#fff;border-radius:10px;text-decoration:none;font-weight:700;margin-top:12px;">Donasi Sekarang</a>
                         <p style="color:#888;font-size:.8rem;margin-top:4px;">*Anda harus login terlebih dahulu</p>
                     <?php endif; ?>
                 <?php else: ?>

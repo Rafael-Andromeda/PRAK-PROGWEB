@@ -1,5 +1,4 @@
 <?php
-// config.php — Konfigurasi Database Kindnesia
 define('DB_HOST', 'localhost');
 define('DB_USER', 'root');       // Sesuaikan dengan user DB Anda
 define('DB_PASS', '');           // Sesuaikan dengan password DB Anda
