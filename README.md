@@ -47,8 +47,8 @@ password: donatur123
 Pengelola:
 
 ```text
-username: greenearth
-password: pengelola123
+username: admin
+password: admin123
 ```
 
 ## Struktur Folder
