@@ -63,11 +63,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Upload file bukti
         $file      = $_FILES['bukti'];
         $ext       = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
-        $allowed   = ['jpg','jpeg','png','pdf'];
+        $allowed   = ['jpg','jpeg'];
         $maxSize   = 5 * 1024 * 1024; // 5 MB
 
         if (!in_array($ext, $allowed)) {
-            $error = 'Format file harus JPG, PNG, atau PDF.';
+            $error = 'Format file harus JPG.';
         } elseif ($file['size'] > $maxSize) {
             $error = 'Ukuran file maksimal 5 MB.';
         } else {
@@ -313,13 +313,13 @@ if (empty($metodeOptions)) {
             <div class="form-group">
                 <label for="bukti">Bukti Transfer <span style="color:#e74c3c">*</span></label>
                 <div class="file-upload-wrapper">
-                    <input type="file" id="bukti" name="bukti" accept=".jpg,.jpeg,.png,.pdf" required
+                    <input type="file" id="bukti" name="bukti" accept=".jpg,.jpeg" required
                           >
                     <label for="bukti" class="file-upload-label">
-                        <span id="fileNameDisplay">Pilih file (JPG / PNG / PDF)</span>
+                        <span id="fileNameDisplay">Pilih file (JPG)</span>
                     </label>
                 </div>
-                <p class="file-hint">Format: JPG, PNG, PDF. Maks. 5 MB.</p>
+                <p class="file-hint">Format: JPG. Maks. 5 MB.</p>
             </div>
 
             <!-- PESAN -->

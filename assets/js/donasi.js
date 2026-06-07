@@ -3,7 +3,7 @@
   'use strict';
 
   const MAX_FILE_SIZE = 5 * 1024 * 1024;
-  const ALLOWED_EXT = ['jpg', 'jpeg', 'png', 'pdf'];
+  const ALLOWED_EXT = ['jpg', 'jpeg'];
 
   window.setNominal = function (val, el) {
     const nominalInput = document.getElementById('nominalInput');
@@ -23,7 +23,7 @@
   function updateFileLabel(fileInput) {
     const label = document.getElementById('fileNameDisplay');
     if (!label) return;
-    label.textContent = fileInput.files[0]?.name || 'Pilih file (JPG / PNG / PDF)';
+    label.textContent = fileInput.files[0]?.name || 'Pilih file (JPG)';
   }
 
   function validateDonationForm(event) {
@@ -56,7 +56,7 @@
 
     if (!ALLOWED_EXT.includes(getExtension(file.name))) {
       event.preventDefault();
-      alert('Format bukti transfer harus JPG, PNG, atau PDF.');
+      alert('Format bukti transfer harus JPG.');
       fileInput.value = '';
       updateFileLabel(fileInput);
     }
