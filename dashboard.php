@@ -236,6 +236,64 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
+// === HANDLER: Update Payment Settings ===
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['aksi'] ?? '') === 'update_pembayaran') {
+    $db2 = getDB();
+    $noEwallet   = trim($_POST['no_ewallet']  ?? '');
+    $namaEwallet = trim($_POST['nama_ewallet'] ?? '');
+    $noRek       = trim($_POST['no_rekening'] ?? '');
+    $namaBank    = trim($_POST['nama_bank']   ?? '');
+    $atasNama    = trim($_POST['atas_nama']   ?? '');
+    $qrisFile    = null;
+
+    // Handle QRIS upload
+    if (!empty($_FILES['qris_image']['name'])) {
+        $file    = $_FILES['qris_image'];
+        $ext     = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+        $allowed = ['jpg','jpeg','png'];
+        if (!in_array($ext, $allowed)) {
+            setFlash($msg, $msgType, 'Format QRIS harus JPG atau PNG.', 'error');
+        } elseif ($file['size'] > 5 * 1024 * 1024) {
+            setFlash($msg, $msgType, 'Ukuran file QRIS maksimal 5 MB.', 'error');
+        } else {
+            $qrisDir = 'uploads/qris/';
+            if (!is_dir($qrisDir)) mkdir($qrisDir, 0755, true);
+            $qrisFileName = 'qris_' . $user['id'] . '_' . time() . '.' . $ext;
+            if (move_uploaded_file($file['tmp_name'], $qrisDir . $qrisFileName)) {
+                $qrisFile = 'qris/' . $qrisFileName;
+            } else {
+                setFlash($msg, $msgType, 'Gagal upload gambar QRIS.', 'error');
+            }
+        }
+    }
+
+    if ($msgType !== 'error') {
+        if ($qrisFile !== null) {
+            $stmtP = $db2->prepare("UPDATE pengelola SET no_ewallet=?, nama_ewallet=?, no_rekening=?, nama_bank=?, atas_nama=?, qris_image=? WHERE id=?");
+            $stmtP->bind_param('ssssssi', $noEwallet, $namaEwallet, $noRek, $namaBank, $atasNama, $qrisFile, $user['id']);
+        } else {
+            $stmtP = $db2->prepare("UPDATE pengelola SET no_ewallet=?, nama_ewallet=?, no_rekening=?, nama_bank=?, atas_nama=? WHERE id=?");
+            $stmtP->bind_param('sssssi', $noEwallet, $namaEwallet, $noRek, $namaBank, $atasNama, $user['id']);
+        }
+        if ($stmtP->execute()) {
+            setFlash($msg, $msgType, 'Informasi pembayaran berhasil diperbarui.', 'success');
+        } else {
+            setFlash($msg, $msgType, 'Gagal menyimpan: ' . $db2->error, 'error');
+        }
+        $stmtP->close();
+    }
+    $db2->close();
+}
+
+// Fetch pengelola payment info
+$dbP = getDB();
+$stmtPengelola = $dbP->prepare("SELECT qris_image, no_ewallet, nama_ewallet, no_rekening, nama_bank, atas_nama FROM pengelola WHERE id=? LIMIT 1");
+$stmtPengelola->bind_param('i', $user['id']);
+$stmtPengelola->execute();
+$pengelolaInfo = $stmtPengelola->get_result()->fetch_assoc();
+$stmtPengelola->close();
+$dbP->close();
+
 // Ambil kampanye hanya milik pengelola login + total pending per kampanye
 $stmtK = $db->prepare(
     "SELECT k.id, k.pengelola_id, k.judul, k.kategori, k.lokasi, k.deskripsi, k.gambar,
@@ -279,6 +337,7 @@ $danaRejected   = array_sum(array_map(fn($d) => (float)$d['nominal'], array_filt
 
 $db->close();
 ?>
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -313,6 +372,10 @@ $db->close();
     .ds-box .ds-label { font-size:.78rem; color:#888; }
     .ds-box .ds-val { font-weight:700; font-size:1rem; margin-top:2px; }
     .text-muted { color:#888; font-size:.82rem; }
+    .pay-settings-card { background:#f8fffe; border:1.5px solid #b2dfdb; border-radius:12px; padding:18px 20px; margin-bottom:18px; }
+    .pay-settings-title { font-weight:700; color:#2e7d32; margin-bottom:12px; font-size:.97rem; }
+    .btn-primary { background:#4CAF50; color:#fff; border:none; border-radius:8px; padding:12px 28px; font-size:1rem; font-weight:600; cursor:pointer; transition:.2s; }
+    .btn-primary:hover { background:#388e3c; }
   </style>
 </head>
 <body>
@@ -354,6 +417,7 @@ $db->close();
   <div class="tabs">
     <button class="tab-btn active" onclick="showTab('kampanye', this)">📋 Kampanye Saya</button>
     <button class="tab-btn" onclick="showTab('donasi', this)">📥 Donasi Masuk</button>
+    <button class="tab-btn" onclick="showTab('pembayaran', this)">💳 Pengaturan Pembayaran</button>
   </div>
 
   <section id="tab-kampanye" class="tab-content active">
@@ -459,6 +523,73 @@ $db->close();
         </tbody>
       </table>
     </div>
+  </section>
+
+  <!-- TAB: PENGATURAN PEMBAYARAN -->
+  <section id="tab-pembayaran" class="tab-content">
+    <div class="section-header">
+      <h2>💳 Pengaturan Informasi Pembayaran</h2>
+      <p style="color:#666;font-size:.9rem;margin-top:4px;">Informasi ini akan ditampilkan kepada donatur saat memilih metode pembayaran.</p>
+    </div>
+    <?php if (($msgType ?? '') === 'success' && str_contains($msg ?? '', 'pembayaran')): ?>
+      <div style="background:#f0fdf4;border:1.5px solid #86efac;color:#166534;border-radius:10px;padding:12px 18px;margin-bottom:18px;font-weight:600;">✅ <?= htmlspecialchars($msg) ?></div>
+    <?php elseif (($msgType ?? '') === 'error' && str_contains($msg ?? '', 'QRIS')): ?>
+      <div style="background:#FEF2F2;border:1.5px solid #FCA5A5;color:#DC2626;border-radius:10px;padding:12px 18px;margin-bottom:18px;">⚠ <?= htmlspecialchars($msg) ?></div>
+    <?php endif; ?>
+    <form method="POST" enctype="multipart/form-data" style="max-width:600px;">
+      <input type="hidden" name="aksi" value="update_pembayaran">
+
+      <div class="pay-settings-card">
+        <div class="pay-settings-title">📱 QRIS</div>
+        <div class="form-row">
+          <label>Upload Gambar QRIS</label>
+          <input type="file" name="qris_image" accept=".jpg,.jpeg,.png" style="border:1.5px solid #ddd;border-radius:8px;padding:8px;width:100%;box-sizing:border-box;">
+          <small style="color:#888;">Format JPG/PNG, maks 5MB. Biarkan kosong jika tidak ingin mengganti.</small>
+        </div>
+        <?php if (!empty($pengelolaInfo['qris_image'])): ?>
+          <div style="margin-top:8px;text-align:center;">
+            <p style="color:#555;font-size:.85rem;margin-bottom:6px;">QRIS saat ini:</p>
+            <img src="uploads/<?= htmlspecialchars($pengelolaInfo['qris_image']) ?>" alt="QRIS" style="max-width:180px;border:2px solid #4CAF50;border-radius:8px;padding:4px;">
+          </div>
+        <?php else: ?>
+          <p style="color:#aaa;font-size:.85rem;text-align:center;margin-top:6px;">Belum ada gambar QRIS.</p>
+        <?php endif; ?>
+      </div>
+
+      <div class="pay-settings-card">
+        <div class="pay-settings-title">💳 E-Wallet</div>
+        <div class="form-row">
+          <label>Nama Platform E-Wallet</label>
+          <input type="text" name="nama_ewallet" value="<?= htmlspecialchars($pengelolaInfo['nama_ewallet'] ?? '') ?>" placeholder="Contoh: GoPay / OVO / Dana">
+        </div>
+        <div class="form-row">
+          <label>Nomor E-Wallet</label>
+          <input type="text" name="no_ewallet" value="<?= htmlspecialchars($pengelolaInfo['no_ewallet'] ?? '') ?>" placeholder="Contoh: 081234567890">
+        </div>
+      </div>
+
+      <div class="pay-settings-card">
+        <div class="pay-settings-title">🏦 Transfer Bank</div>
+        <div class="form-row">
+          <label>Nama Bank</label>
+          <input type="text" name="nama_bank" value="<?= htmlspecialchars($pengelolaInfo['nama_bank'] ?? '') ?>" placeholder="Contoh: BCA / Mandiri / BNI">
+        </div>
+        <div class="form-row">
+          <label>Nomor Rekening</label>
+          <input type="text" name="no_rekening" value="<?= htmlspecialchars($pengelolaInfo['no_rekening'] ?? '') ?>" placeholder="Contoh: 1234567890">
+        </div>
+      </div>
+
+      <div class="pay-settings-card">
+        <div class="pay-settings-title">👤 Atas Nama (untuk E-Wallet &amp; Bank)</div>
+        <div class="form-row">
+          <label>Nama Pemilik Rekening</label>
+          <input type="text" name="atas_nama" value="<?= htmlspecialchars($pengelolaInfo['atas_nama'] ?? '') ?>" placeholder="Nama sesuai rekening/e-wallet">
+        </div>
+      </div>
+
+      <button type="submit" class="btn-primary" style="margin-top:8px;">💾 Simpan Pengaturan Pembayaran</button>
+    </form>
   </section>
 </main>
 

@@ -43,6 +43,12 @@ CREATE TABLE pengelola (
   no_telepon      VARCHAR(20)   DEFAULT NULL,
   alamat          TEXT          DEFAULT NULL,
   password        VARCHAR(255)  NOT NULL,
+  qris_image      VARCHAR(300)  DEFAULT NULL,
+  no_ewallet      VARCHAR(100)  DEFAULT NULL,
+  nama_ewallet    VARCHAR(100)  DEFAULT NULL,
+  no_rekening     VARCHAR(100)  DEFAULT NULL,
+  nama_bank       VARCHAR(100)  DEFAULT NULL,
+  atas_nama       VARCHAR(200)  DEFAULT NULL,
   created_at      TIMESTAMP     DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -103,10 +109,10 @@ INSERT INTO donatur (username, nama, email, no_telepon, password) VALUES
   ('sari_d', 'Sari Dewi', 'sari@email.com', '082345678901', 'donatur123'),
   ('andi_p', 'Andi Pratama', 'andi@email.com', '083456789012', 'donatur123');
 
-INSERT INTO pengelola (username, nama_pengelola, email, no_telepon, alamat, password) VALUES
-  ('greenearth', 'Green Earth', 'greenearth@email.com', '021-1234567', 'Jl. Lingkungan No.1, Jakarta', 'pengelola123'),
-  ('ecocity', 'Eco City Foundation', 'ecocity@email.com', '021-2345678', 'Jl. Hijau No.2, Bandung', 'pengelola123'),
-  ('saveriver', 'Save River Indonesia', 'saveriver@email.com', '021-3456789', 'Jl. Sungai No.3, Surabaya', 'pengelola123');
+INSERT INTO pengelola (username, nama_pengelola, email, no_telepon, alamat, password, qris_image, no_ewallet, nama_ewallet, no_rekening, nama_bank, atas_nama) VALUES
+  ('greenearth', 'Green Earth', 'greenearth@email.com', '021-1234567', 'Jl. Lingkungan No.1, Jakarta', 'pengelola123', 'qris/qris_default.png', '081234567890', 'GoPay / OVO / Dana', '1234567890', 'BCA', 'Green Earth'),
+  ('ecocity', 'Eco City Foundation', 'ecocity@email.com', '021-2345678', 'Jl. Hijau No.2, Bandung', 'pengelola123', NULL, '082345678901', 'GoPay / Dana', '0987654321', 'Mandiri', 'Eco City Foundation'),
+  ('saveriver', 'Save River Indonesia', 'saveriver@email.com', '021-3456789', 'Jl. Sungai No.3, Surabaya', 'pengelola123', NULL, '083456789012', 'OVO / Dana', '1122334455', 'BNI', 'Save River Indonesia');
 
 -- ============================================================
 -- DATA KAMPANYE DEMO
@@ -142,3 +148,14 @@ VALUES
   (1, 1, 100000, 'Transfer Bank', 'bukti_1778570849_1.png', 'Semoga hutannya kembali hijau.', 'verified', DATE_SUB(NOW(), INTERVAL 3 DAY), DATE_SUB(NOW(), INTERVAL 2 DAY)),
   (1, 2, 75000, 'QRIS', 'bukti_1778753681_1.png', 'Dukung program lingkungan.', 'pending', DATE_SUB(NOW(), INTERVAL 1 DAY), NULL),
   (2, 3, 50000, 'QRIS', 'bukti_1778753684_1.png', 'Semoga bermanfaat.', 'rejected', DATE_SUB(NOW(), INTERVAL 2 DAY), DATE_SUB(NOW(), INTERVAL 1 DAY));
+
+-- ============================================================
+-- MIGRASI: Tambah kolom pembayaran ke tabel pengelola
+-- Jalankan jika database sudah ada sebelumnya
+-- ============================================================
+-- ALTER TABLE pengelola ADD COLUMN IF NOT EXISTS qris_image   VARCHAR(300) DEFAULT NULL;
+-- ALTER TABLE pengelola ADD COLUMN IF NOT EXISTS no_ewallet   VARCHAR(100) DEFAULT NULL;
+-- ALTER TABLE pengelola ADD COLUMN IF NOT EXISTS nama_ewallet VARCHAR(100) DEFAULT NULL;
+-- ALTER TABLE pengelola ADD COLUMN IF NOT EXISTS no_rekening  VARCHAR(100) DEFAULT NULL;
+-- ALTER TABLE pengelola ADD COLUMN IF NOT EXISTS nama_bank    VARCHAR(100) DEFAULT NULL;
+-- ALTER TABLE pengelola ADD COLUMN IF NOT EXISTS atas_nama    VARCHAR(200) DEFAULT NULL;

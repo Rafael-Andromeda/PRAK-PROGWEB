@@ -9,7 +9,7 @@ $user = isLoggedIn() ? currentUser() : null;
 $keyword  = trim($_GET['q']      ?? '');
 $kategori = trim($_GET['kategori'] ?? '');
 $lokasi   = trim($_GET['lokasi'] ?? '');
-$tanggal  = trim($_GET['tanggal'] ?? ''); // opsional: filter tanggal/deadline kampanye
+$tanggal  = trim($_GET['tanggal'] ?? ''); 
 $page     = max(1, intval($_GET['page'] ?? 1));
 $perPage  = 6;
 $offset   = ($page - 1) * $perPage;
@@ -38,7 +38,7 @@ if ($lokasi !== '') {
     $types   .= "s";
 }
 if ($tanggal !== '') {
-    $where[]  = "k.deadline = ?";
+    $where[]  = "k.deadline >= ?";
     $params[] = $tanggal;
     $types   .= "s";
 }

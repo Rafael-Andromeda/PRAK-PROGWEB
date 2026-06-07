@@ -18,8 +18,10 @@ if ($kampanyeId <= 0) { header('Location: index.php'); exit; }
 
 $db   = getDB();
 $stmt = $db->prepare(
-    "SELECT k.id, k.judul, k.target_dana, k.dana_terkumpul, k.metode_donasi, k.deadline
+    "SELECT k.id, k.judul, k.target_dana, k.dana_terkumpul, k.metode_donasi, k.deadline,
+            p.qris_image, p.no_ewallet, p.nama_ewallet, p.no_rekening, p.nama_bank, p.atas_nama
      FROM kampanye k
+     JOIN pengelola p ON p.id = k.pengelola_id
      WHERE k.id = ? AND k.deadline >= CURDATE()
      LIMIT 1"
 );
@@ -131,6 +133,15 @@ if (empty($metodeOptions)) {
         .nominal-btn:hover, .nominal-btn.active { border-color:#4CAF50; background:#E8F5E9; color:#2e7d32; font-weight:700; }
         .nominal-custom { width:100%; margin-top:8px; padding:10px; border:1.5px solid #ccc; border-radius:8px; font-size:.95rem; }
         .nominal-custom:focus { border-color:#4CAF50; outline:none; }
+        .payment-info-box { background:#f0fdf4; border:1.5px solid #86efac; border-radius:12px; padding:16px 20px; margin:10px 0 16px; }
+        .payment-info-title { font-weight:700; color:#166534; margin-bottom:12px; font-size:1rem; }
+        .payment-detail-row { display:flex; align-items:center; gap:12px; margin:7px 0; flex-wrap:wrap; }
+        .payment-label { color:#6b7280; font-size:.85rem; min-width:90px; }
+        .payment-value { color:#111; font-size:.95rem; display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+        .copy-btn { background:#4CAF50; color:#fff; border:none; border-radius:6px; padding:3px 10px; font-size:.8rem; cursor:pointer; transition:.2s; }
+        .copy-btn:hover { background:#388e3c; }
+        .copy-btn.copied { background:#2196F3; }
+        .user-info { color:#fff; font-size:.9rem; margin-right:8px; }
     </style>
 </head>
 <body>
@@ -138,8 +149,7 @@ if (empty($metodeOptions)) {
     <div class="container nav">
         <h1 class="logo">Kindnesia</h1>
         <nav>
-            <span class="welcome-text">👋 <?= htmlspecialchars($donatur['nama']) ?></span>
-            <a href="details.php?id=<?= $kampanyeId ?>">← Kembali</a>
+        <span class="user-info">👤 <?= htmlspecialchars($user['nama']) ?></span>            <a href="details.php?id=<?= $kampanyeId ?>">← Kembali</a>
             <a href="index.php">Beranda</a>
             <a href="logout.php" class="logout-btn">Logout</a>
         </nav>
@@ -214,13 +224,89 @@ if (empty($metodeOptions)) {
             <!-- METODE -->
             <div class="form-group">
                 <label for="metode">Metode Pembayaran</label>
-                <select id="metode" name="metode" required>
+                <select id="metode" name="metode" required onchange="showPaymentInfo(this.value)">
                     <option value="">Pilih Metode</option>
                     <?php foreach ($metodeOptions as $opt): ?>
                         <option value="<?= htmlspecialchars($opt) ?>" <?= ($_POST['metode'] ?? '') === $opt ? 'selected' : '' ?>><?= htmlspecialchars($opt) ?></option>
                     <?php endforeach; ?>
                 </select>
                 <p class="file-hint">Metode tersedia dari kampanye ini: <?= htmlspecialchars($kampanye['metode_donasi'] ?: 'Transfer Bank, E-Wallet, QRIS') ?></p>
+            </div>
+
+            <!-- INFO PEMBAYARAN (dinamis sesuai metode) -->
+            <?php
+            $qrisImg   = $kampanye['qris_image']   ?? null;
+            $noEwallet = $kampanye['no_ewallet']    ?? null;
+            $namaEwallet = $kampanye['nama_ewallet'] ?? 'E-Wallet';
+            $noRek     = $kampanye['no_rekening']   ?? null;
+            $namaBank  = $kampanye['nama_bank']     ?? null;
+            $atasNama  = $kampanye['atas_nama']     ?? null;
+            ?>
+
+            <!-- QRIS -->
+            <div id="info-qris" class="payment-info-box" style="display:none;">
+                <div class="payment-info-title">📱 Bayar via QRIS</div>
+                <?php if ($qrisImg): ?>
+                    <div style="text-align:center;margin:10px 0;">
+                        <img src="uploads/<?= htmlspecialchars($qrisImg) ?>" alt="QRIS Code"
+                             style="max-width:260px;width:100%;border:2px solid #4CAF50;border-radius:10px;padding:6px;background:#fff;">
+                    </div>
+                    <p style="text-align:center;color:#555;font-size:.9rem;">Scan QR di atas dengan aplikasi pembayaran apapun yang mendukung QRIS.</p>
+                <?php else: ?>
+                    <p style="color:#888;text-align:center;">Kode QRIS belum dikonfigurasi oleh pengelola.</p>
+                <?php endif; ?>
+            </div>
+
+            <!-- E-WALLET -->
+            <div id="info-ewallet" class="payment-info-box" style="display:none;">
+                <div class="payment-info-title">💳 Bayar via E-Wallet</div>
+                <?php if ($noEwallet): ?>
+                    <div class="payment-detail-row">
+                        <span class="payment-label">Platform</span>
+                        <span class="payment-value"><?= htmlspecialchars($namaEwallet) ?></span>
+                    </div>
+                    <div class="payment-detail-row">
+                        <span class="payment-label">Nomor</span>
+                        <span class="payment-value">
+                            <strong><?= htmlspecialchars($noEwallet) ?></strong>
+                            <button type="button" class="copy-btn" onclick="copyText('<?= htmlspecialchars($noEwallet) ?>', this)">Salin</button>
+                        </span>
+                    </div>
+                    <?php if ($atasNama): ?>
+                    <div class="payment-detail-row">
+                        <span class="payment-label">Atas Nama</span>
+                        <span class="payment-value"><?= htmlspecialchars($atasNama) ?></span>
+                    </div>
+                    <?php endif; ?>
+                <?php else: ?>
+                    <p style="color:#888;text-align:center;">Nomor E-Wallet belum dikonfigurasi oleh pengelola.</p>
+                <?php endif; ?>
+            </div>
+
+            <!-- TRANSFER BANK -->
+            <div id="info-bank" class="payment-info-box" style="display:none;">
+                <div class="payment-info-title">🏦 Transfer Bank</div>
+                <?php if ($noRek): ?>
+                    <div class="payment-detail-row">
+                        <span class="payment-label">Bank</span>
+                        <span class="payment-value"><?= htmlspecialchars($namaBank ?: '-') ?></span>
+                    </div>
+                    <div class="payment-detail-row">
+                        <span class="payment-label">No. Rekening</span>
+                        <span class="payment-value">
+                            <strong><?= htmlspecialchars($noRek) ?></strong>
+                            <button type="button" class="copy-btn" onclick="copyText('<?= htmlspecialchars($noRek) ?>', this)">Salin</button>
+                        </span>
+                    </div>
+                    <?php if ($atasNama): ?>
+                    <div class="payment-detail-row">
+                        <span class="payment-label">Atas Nama</span>
+                        <span class="payment-value"><?= htmlspecialchars($atasNama) ?></span>
+                    </div>
+                    <?php endif; ?>
+                <?php else: ?>
+                    <p style="color:#888;text-align:center;">Nomor rekening belum dikonfigurasi oleh pengelola.</p>
+                <?php endif; ?>
             </div>
 
             <!-- BUKTI TRANSFER -->
@@ -261,5 +347,31 @@ if (empty($metodeOptions)) {
 </footer>
 
 <script src="assets/js/donasi.js"></script>
+<script>
+function showPaymentInfo(val) {
+    document.getElementById('info-qris').style.display   = 'none';
+    document.getElementById('info-ewallet').style.display = 'none';
+    document.getElementById('info-bank').style.display    = 'none';
+    if (!val) return;
+    const v = val.toLowerCase();
+    if (v.includes('qris'))          document.getElementById('info-qris').style.display   = 'block';
+    else if (v.includes('e-wallet') || v.includes('ewallet') || v.includes('wallet'))
+                                      document.getElementById('info-ewallet').style.display = 'block';
+    else if (v.includes('transfer') || v.includes('bank'))
+                                      document.getElementById('info-bank').style.display    = 'block';
+}
+function copyText(text, btn) {
+    navigator.clipboard.writeText(text).then(() => {
+        btn.textContent = '✓ Disalin';
+        btn.classList.add('copied');
+        setTimeout(() => { btn.textContent = 'Salin'; btn.classList.remove('copied'); }, 2000);
+    });
+}
+// Auto-trigger on POST (when page reloads with selected method)
+window.addEventListener('DOMContentLoaded', function() {
+    var sel = document.getElementById('metode');
+    if (sel && sel.value) showPaymentInfo(sel.value);
+});
+</script>
 </body>
 </html>

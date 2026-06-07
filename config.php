@@ -1,7 +1,7 @@
 <?php
 define('DB_HOST', 'localhost');
-define('DB_USER', 'root');       // Sesuaikan dengan user DB Anda
-define('DB_PASS', '');           // Sesuaikan dengan password DB Anda
+define('DB_USER', 'root');
+define('DB_PASS', '');           
 define('DB_NAME', 'kindnesia');
 
 function getDB() {
