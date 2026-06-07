@@ -138,9 +138,10 @@ if (empty($metodeOptions)) {
     <div class="container nav">
         <h1 class="logo">Kindnesia</h1>
         <nav>
+            <span class="welcome-text">👋 <?= htmlspecialchars($donatur['nama']) ?></span>
+            <a href="details.php?id=<?= $kampanyeId ?>">← Kembali</a>
             <a href="index.php">Beranda</a>
-            <a href="details.php?id=<?= $kampanyeId ?>">← Kembali ke Kampanye</a>
-            <a href="logout.php" class="logout-btn" style="background:#e74c3c;color:#fff;padding:6px 14px;border-radius:8px;">Logout</a>
+            <a href="logout.php" class="logout-btn">Logout</a>
         </nav>
     </div>
 </header>

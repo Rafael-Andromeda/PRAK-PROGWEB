@@ -114,7 +114,6 @@ function progressPct($terkumpul, $target) {
     <div class="container nav">
         <h1 class="logo">Kindnesia</h1>
         <nav>
-            <a href="index.php">Beranda</a>
             <?php if ($user): ?>
                 <span class="user-info">👤 <?= htmlspecialchars($user['nama']) ?></span>
                 <?php if ($user['role'] === 'pengelola'): ?>

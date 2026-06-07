@@ -64,8 +64,6 @@ function rp($n) { return 'Rp ' . number_format($n, 0, ',', '.'); }
     .badge-verified { background:#DCFCE7; color:#166534; padding:4px 12px; border-radius:20px; font-size:.82rem; font-weight:700; }
     .badge-rejected { background:#FEE2E2; color:#991B1B; padding:4px 12px; border-radius:20px; font-size:.82rem; font-weight:700; }
     .empty-state { text-align:center; padding:60px 20px; color:#aaa; }
-    .user-info { color:#fff; font-size:.9rem; margin-right:8px; }
-    .logout-btn { background:#e74c3c; color:#fff !important; padding:6px 14px; border-radius:8px; }
     .bukti-link { color:#2563eb; font-size:.82rem; }
   </style>
 </head>
@@ -74,8 +72,8 @@ function rp($n) { return 'Rp ' . number_format($n, 0, ',', '.'); }
   <div class="container nav">
     <h1 class="logo">Kindnesia</h1>
     <nav>
-      <a href="index.php">Beranda</a>
       <span class="user-info">👤 <?= htmlspecialchars($user['nama']) ?></span>
+      <a href="index.php">Beranda</a>
       <a href="logout.php" class="logout-btn">Logout</a>
     </nav>
   </div>

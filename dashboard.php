@@ -384,13 +384,15 @@ $db->close();
             <td><div class="mini-bar"><div style="width:<?= $pct ?>%"></div></div><small><?= $pct ?>%</small></td>
             <td><?= date('d/m/Y', strtotime($k['deadline'])) ?> <small>(<?= $sisa ?> hr)</small></td>
             <td>
-              <button class="btn-sm btn-edit" onclick="openEdit(<?= (int)$k['id'] ?>, <?= $json ?>)">Edit</button>
-              <form method="POST" style="display:inline" onsubmit="return confirm('Yakin hapus kampanye ini? Kampanye hanya bisa dihapus jika dana terkumpul belum mencapai Rp 10.000.')">
-                <input type="hidden" name="aksi" value="hapus">
-                <input type="hidden" name="kampanye_id" value="<?= (int)$k['id'] ?>">
-                <button type="submit" class="btn-sm btn-danger">Hapus</button>
-              </form>
-              <a href="donatur_kampanye.php?id=<?= (int)$k['id'] ?>" class="btn-sm" style="background:#3b82f6;color:#fff;padding:5px 10px;border-radius:6px;text-decoration:none;font-size:.8rem;">Donatur</a>
+              <div class="action-group">
+                <button class="btn-sm btn-edit" onclick="openEdit(<?= (int)$k['id'] ?>, <?= $json ?>)">Edit</button>
+                <form method="POST" class="inline-form" onsubmit="return confirm('Yakin hapus kampanye ini? Kampanye hanya bisa dihapus jika dana terkumpul belum mencapai Rp 10.000.')">
+                  <input type="hidden" name="aksi" value="hapus">
+                  <input type="hidden" name="kampanye_id" value="<?= (int)$k['id'] ?>">
+                  <button type="submit" class="btn-sm btn-danger">Hapus</button>
+                </form>
+                <a href="donatur_kampanye.php?id=<?= (int)$k['id'] ?>" class="btn-sm btn-donatur">Donatur</a>
+              </div>
             </td>
           </tr>
         <?php endforeach; ?>

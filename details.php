@@ -48,7 +48,6 @@ function rp($num) {
     <div class="container nav">
         <h1 class="logo">Kindnesia</h1>
         <nav>
-            <a href="index.php">Beranda</a>
             <?php if ($user): ?>
                 <span class="user-info">👤 <?= htmlspecialchars($user['nama']) ?></span>
                 <?php if ($user['role'] === 'pengelola'): ?>
@@ -56,8 +55,10 @@ function rp($num) {
                 <?php else: ?>
                     <a href="riwayat_donasi.php">Donasi Saya</a>
                 <?php endif; ?>
+                <a href="index.php">Beranda</a>
                 <a href="logout.php" class="logout-btn">Logout</a>
             <?php else: ?>
+                <a href="index.php">Beranda</a>
                 <a href="login.html" class="login-btn">Login</a>
             <?php endif; ?>
         </nav>

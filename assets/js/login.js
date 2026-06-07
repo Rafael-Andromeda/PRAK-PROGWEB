@@ -7,12 +7,15 @@
   const loginBtn = document.getElementById('loginBtn');
   const usernameEl = document.querySelector('.input-group input[type="text"]');
   const passwordEl = document.querySelector('.input-group input[type="password"]');
+  const roleToggle = document.querySelector('.role-toggle');
+  const roleButtons = document.querySelectorAll('.role-toggle button');
 
   window.setRole = function (role, btn) {
     currentRole = role;
-    document.querySelectorAll('.role-toggle button').forEach(b => b.classList.remove('active'));
+    roleButtons.forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     loginBtn.textContent = role === 'donatur' ? 'Masuk sebagai Donatur' : 'Masuk sebagai Pengelola';
+    roleToggle.classList.toggle('pengelola-active', role === 'pengelola');
   };
 
   function removeMsg() {

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
@@ -12,7 +12,7 @@
     <div class="container nav">
         <h1 class="logo">Kindnesia</h1>
         <nav>
-            <a href="index.html">Beranda</a>
+            <a href="#kampanye">Kampanye</a>
             <a href="login.html" class="login-btn">Login</a>
         </nav>
     </div>
@@ -114,16 +114,75 @@
 </section>
 
 <footer>
+    <!-- Newsletter CTA Section -->
+    <div class="footer-cta">
+        <div class="container">
+            <h3>Jangan Lewatkan Update Kampanye Terbaru</h3>
+            <p>Daftarkan email Anda untuk mendapatkan notifikasi kampanye baru dan kesempatan untuk membantu</p>
+            <form class="newsletter-form" id="newsletterForm">
+                <input type="email" placeholder="Masukkan email Anda..." required>
+                <button type="submit">Subscribe</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Partner Carousel Section -->
+    <div class="partners-section">
+        <div class="container">
+            <h4>Bermitra Dengan</h4>
+            <div class="partners-carousel">
+                <div class="partner-item">🏢 Partner 1</div>
+                <div class="partner-item">🏢 Partner 2</div>
+                <div class="partner-item">🏢 Partner 3</div>
+                <div class="partner-item">🏢 Partner 4</div>
+                <div class="partner-item">🏢 Partner 5</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Footer -->
     <div class="footer-content container">
-        <div>
+        <div class="footer-section">
             <h3>Kindnesia</h3>
-            <p>Platform donasi untuk lingkungan yang lebih baik.</p>
+            <p>Platform crowdfunding sosial dan lingkungan untuk menciptakan dampak positif bersama.</p>
+            <div class="social-links">
+                <a href="#" title="Facebook">f</a>
+                <a href="#" title="Instagram">📷</a>
+                <a href="#" title="Twitter">𝕏</a>
+            </div>
+        </div>
+        <div class="footer-section">
+            <h4>Kategori Kampanye</h4>
+            <ul>
+                <li><a href="#">Lingkungan</a></li>
+                <li><a href="#">Kesehatan</a></li>
+                <li><a href="#">Pendidikan</a></li>
+                <li><a href="#">Bencana</a></li>
+            </ul>
+        </div>
+        <div class="footer-section">
+            <h4>Tentang Kami</h4>
+            <ul>
+                <li><a href="#">Tentang Kindnesia</a></li>
+                <li><a href="#">Bagaimana Cara Kerja</a></li>
+                <li><a href="#">Pertanyaan Umum</a></li>
+                <li><a href="#">Hubungi Kami</a></li>
+            </ul>
+        </div>
+        <div class="footer-section">
+            <h4>Kontak & Dukungan</h4>
+            <p><strong>Email:</strong> hello@kindnesia.id</p>
+            <p><strong>Phone:</strong> +62 812 3456 7890</p>
+            <p><strong>Alamat:</strong> Jakarta, Indonesia</p>
+            <a href="https://api.whatsapp.com/send?phone=6281234567890" class="whatsapp-btn" target="_blank">💬 Chat WhatsApp</a>
         </div>
     </div>
     <div class="copyright">
-        <p>© 2026 Kindnesia | Copyright by Kelompok Gatau</p>
+        <p>© 2026 Kindnesia | <a href="#">Kebijakan Privasi</a> | <a href="#">Syarat & Ketentuan</a> | Made with ❤️ by Kelompok Gatau</p>
     </div>
 </footer>
+
+<button id="scrollToTop" class="scroll-to-top" title="Kembali ke atas">↑</button>
 
 <script src="assets/js/index.js"></script>
 </body>
